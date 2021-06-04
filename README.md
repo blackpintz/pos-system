@@ -1,7 +1,6 @@
 # Project Name
 
-- Blobject website template.
-
+- Pos-System
 ## Built With
 
 - Next.js
