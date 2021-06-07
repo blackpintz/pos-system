@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import {Grid, Paper, Typography, Card, CardContent, CardActions, IconButton} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import { makeStyles } from '@material-ui/core/styles';
 import {getMenufromDB} from '../actions/menu';
 import Checkout from './Checkout';
@@ -77,6 +78,15 @@ const Menu = () => {
         setData(data => data.filter(item => item.name !== name))
     }
 
+    const checkQuantity = (name: string) => {
+        const foundItem = data.find(element => element.name === name)
+        return foundItem === undefined ? false : foundItem.quantity > 1
+    }
+
+    const handleRemoveFromCart = (name: string) => {
+        setData(data => data.map(item => item.name === name ? {...item, quantity: item.quantity - 1} : item))
+    }
+
     return (
         <Grid spacing={2} container>
             <Grid item xs={8}>
@@ -92,6 +102,13 @@ const Menu = () => {
                                     </CardContent>
                                     <CardActions className={classes.action}>
                                         <Typography className={classes.price} variant="caption" component="p">KES {item.price}.00</Typography>
+                                        {checkQuantity(item.name) ? (
+                                            <IconButton
+                                            onClick = {() => handleRemoveFromCart(item.name)}
+                                            className={classes.button}>
+                                                <RemoveIcon fontSize="small"/>
+                                            </IconButton>
+                                        ) : (<></>)}
                                         <IconButton
                                         onClick = {() => handleCart(item.price, item.name)}
                                         className={classes.button}>
