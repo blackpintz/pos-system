@@ -73,6 +73,10 @@ const Menu = () => {
         }
     }
 
+    const handleDelete = (name: string) => {
+        setData(data => data.filter(item => item.name !== name))
+    }
+
     return (
         <Grid spacing={2} container>
             <Grid item xs={8}>
@@ -103,7 +107,8 @@ const Menu = () => {
             <Grid item xs={4}>
                 <Paper elevation={0}>
                     <Checkout
-                    data={data} />
+                    data={data}
+                    handleDelete={handleDelete} />
                 </Paper>
             </Grid>
         </Grid>
