@@ -83,6 +83,10 @@ const Menu = () => {
         return foundItem === undefined ? false : foundItem.quantity > 1
     }
 
+    const handleDeleteAll = () => {
+        setData([])
+    }
+
     const handleRemoveFromCart = (name: string) => {
         setData(data => data.map(item => item.name === name ? {...item, quantity: item.quantity - 1} : item))
     }
@@ -125,7 +129,8 @@ const Menu = () => {
                 <Paper elevation={0}>
                     <Checkout
                     data={data}
-                    handleDelete={handleDelete} />
+                    handleDelete={handleDelete}
+                    handleDeleteAll={handleDeleteAll} />
                 </Paper>
             </Grid>
         </Grid>

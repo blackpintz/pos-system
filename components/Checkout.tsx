@@ -1,9 +1,28 @@
 import React from 'react'
-import {TableContainer, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton} from '@material-ui/core' 
+import {TableContainer, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
+Box, Button} from '@material-ui/core' 
 import DeleteIcon from '@material-ui/icons/Delete';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(() => ({
+    button: {
+        marginTop: "2rem",
+        width: "90%",
+        borderRadius: "2rem"
+    },
+
+    resetBtn: {
+        marginTop: "1.2rem",
+        width: "90%",
+        borderRadius: "2rem"
+
+    }
+}))
 
 const Checkout = (props: any) => {
-    const {data, handleDelete} = props
+    const {data, handleDelete, handleDeleteAll} = props
+
+    const classes = useStyles();
     interface dataContent {
        id: string,
        name: string,
@@ -66,6 +85,16 @@ const Checkout = (props: any) => {
                 </TableBody>
             </Table>
         </TableContainer>
+        <Box display="flex" justifyContent="center">
+            <Button
+            onClick={handleDeleteAll}
+            className={classes.resetBtn}
+            variant="outlined" 
+            color="secondary"
+            disabled={data.length === 0}>
+                Reset Order
+            </Button>
+        </Box>
         </>
     )
 }
