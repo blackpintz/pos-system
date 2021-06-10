@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import {TableContainer, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
-Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField} from '@material-ui/core' 
+Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Collapse} from '@material-ui/core' 
+import Alert from '@material-ui/lab/Alert';
+import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch} from 'react-redux';
@@ -21,6 +23,7 @@ const useStyles = makeStyles(() => ({
 
     },
 
+
     phoneBox: {
         marginLeft: "1rem",
         width: "250px"
@@ -33,7 +36,9 @@ const Checkout = (props: any) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState('');
-    const [code, setCode] = useState('+254')
+    const [code, setCode] = useState('+254');
+    const [Invalid, setInValid] = useState(false)
+    const [notification, setNotification] = useState(false)
 
     const dispatch = useDispatch()
     interface dataContent {
@@ -76,17 +81,47 @@ const Checkout = (props: any) => {
     }
 
     const handleOrders = () => {
-        dispatch(addOrderItemToDB(orderData))
-        handleDeleteAll()
-        setOpen(false);
-        setPhone('');
-        setCode('+254')
+        if(phone.length !== 9) {
+            setInValid(true);
+        } else {
+            dispatch(addOrderItemToDB(orderData))
+            handleDeleteAll()
+            setOpen(false);
+            setPhone('');
+            setCode('+254')
+            setInValid(false)
+            setNotification(true)
+            setInterval(() => {
+                setNotification(false)
+              }, 5000);
+        }
     }
 
 
     return (
         <>
         <Typography variant="h6" align="center">Orders</Typography>
+        <Box>
+            <Collapse in={notification}>
+                <Alert
+                variant="filled"
+                action={
+                    <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                        setNotification(false);
+                    }}
+                    >
+                         <CloseIcon fontSize="inherit" />
+                    </IconButton>
+                }
+                >
+                Order successfully created!
+                </Alert>
+            </Collapse>
+        </Box>
         <TableContainer component={Paper} elevation={0}>
             <Table aria-label="simple table">
                 <TableHead>
@@ -160,8 +195,28 @@ const Checkout = (props: any) => {
                         variant="outlined"
                         onChange={(e) =>{setPhone(e.target.value)}} 
                         className={classes.phoneBox}
-                        InputProps={{ inputProps: { min: 10, max: 10 } }}
                         />
+                        <Box mt={2}>
+                            <Collapse in={Invalid}>
+                                <Alert
+                                severity="error"
+                                action={
+                                    <IconButton
+                                    aria-label="close"
+                                    color="inherit"
+                                    size="small"
+                                    onClick={() => {
+                                        setInValid(false)
+                                    }}
+                                    >
+                                        <CloseIcon />
+                                    </IconButton>
+                                }
+                                >
+                                    Your Phone number is invalid
+                                </Alert>
+                            </Collapse>
+                        </Box>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Cancel</Button>
