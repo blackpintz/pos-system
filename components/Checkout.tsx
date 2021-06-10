@@ -1,8 +1,11 @@
 import React, {useState} from 'react'
 import {TableContainer, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
-Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from '@material-ui/core' 
+Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField} from '@material-ui/core' 
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
+import {useDispatch} from 'react-redux';
+import {addOrderItemToDB} from '../actions/orders'
+import countryCodes from '../store/countryCodes';
 
 const useStyles = makeStyles(() => ({
     button: {
@@ -16,6 +19,11 @@ const useStyles = makeStyles(() => ({
         width: "90%",
         borderRadius: "2rem"
 
+    },
+
+    phoneBox: {
+        marginLeft: "1rem",
+        width: "250px"
     }
 }))
 
@@ -24,13 +32,17 @@ const Checkout = (props: any) => {
 
     const classes = useStyles();
     const [open, setOpen] = useState(false);
-    // const [phone, setPhone] = useState('');
+    const [phone, setPhone] = useState('');
+    const [code, setCode] = useState('+254')
+
+    const dispatch = useDispatch()
     interface dataContent {
        id: string,
        name: string,
        price: number,
        quantity: number 
     }
+
 
     const handleTotal = () => {
         let total = 0
@@ -53,6 +65,24 @@ const Checkout = (props: any) => {
     const handleClose = () => {
         setOpen(false);
     }
+
+    const orderData = {
+        orders: data,
+        phoneNumber: `${code}${phone}`,
+        total: handleTotal(),
+        created_at: new Date().toISOString(),
+        completed: false,
+        completed_time: "pending"
+    }
+
+    const handleOrders = () => {
+        dispatch(addOrderItemToDB(orderData))
+        handleDeleteAll()
+        setOpen(false);
+        setPhone('');
+        setCode('+254')
+    }
+
 
     return (
         <>
@@ -108,10 +138,34 @@ const Checkout = (props: any) => {
                 <DialogTitle id="form-dialog-title">Sign up</DialogTitle>
                 <DialogContent>
                     <DialogContentText>Please sign up with your phone number.</DialogContentText>
+                        <TextField
+                        id="standard-select-phone-code"
+                        select
+                        label='Select'
+                        value={code}
+                        onChange={(e) =>{setCode(e.target.value)}} 
+                        variant="outlined"
+                        SelectProps={{
+                            native: true,
+                          }}>
+                        {countryCodes.map(code => (
+                            <option key={code.value} value={code.value}>{code.label}</option>
+                        ))}
+                        </TextField>
+                        <TextField 
+                        placeholder="Enter your phone number"
+                        required
+                        value={phone}
+                        type="number"
+                        variant="outlined"
+                        onChange={(e) =>{setPhone(e.target.value)}} 
+                        className={classes.phoneBox}
+                        InputProps={{ inputProps: { min: 10, max: 10 } }}
+                        />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button color="primary">Signup</Button>
+                    <Button onClick={handleOrders} color="primary">Signup</Button>
                 </DialogActions>
             </Dialog>
         </Box>
