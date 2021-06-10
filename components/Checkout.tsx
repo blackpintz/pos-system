@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {TableContainer, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
-Box, Button} from '@material-ui/core' 
+Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions} from '@material-ui/core' 
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -23,6 +23,8 @@ const Checkout = (props: any) => {
     const {data, handleDelete, handleDeleteAll} = props
 
     const classes = useStyles();
+    const [open, setOpen] = useState(false);
+    // const [phone, setPhone] = useState('');
     interface dataContent {
        id: string,
        name: string,
@@ -42,6 +44,14 @@ const Checkout = (props: any) => {
 
     const deleteFromCart = (name: string) => {
         handleDelete(name)
+    }
+
+    const handleOpen = () => {
+        setOpen(true);
+      };
+    
+    const handleClose = () => {
+        setOpen(false);
     }
 
     return (
@@ -85,6 +95,26 @@ const Checkout = (props: any) => {
                 </TableBody>
             </Table>
         </TableContainer>
+        <Box display="flex" justifyContent="center">
+            <Button
+            className={classes.button} 
+            variant="contained" 
+            color="primary"
+            onClick={handleOpen}
+            disabled={data.length === 0}>
+            Go to checkout
+            </Button>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Sign up</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>Please sign up with your phone number.</DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose} color="primary">Cancel</Button>
+                    <Button color="primary">Signup</Button>
+                </DialogActions>
+            </Dialog>
+        </Box>
         <Box display="flex" justifyContent="center">
             <Button
             onClick={handleDeleteAll}
