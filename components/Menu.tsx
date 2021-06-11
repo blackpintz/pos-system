@@ -1,34 +1,56 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import {Grid, Paper, Typography, Card, CardContent, CardActions, IconButton} from '@material-ui/core';
+import {Grid, Paper, Typography, Card, CardContent, CardActions, IconButton, Box} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { makeStyles } from '@material-ui/core/styles';
 import {getMenufromDB} from '../actions/menu';
 import Checkout from './Checkout';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
     root: {
       minWidth: 275,
+      [theme.breakpoints.down('sm')] : {
+          minWidth: 100,
+      }
     },
 
     action: {
         width: "100%",
         display: "flex",
+        [theme.breakpoints.down('sm')] : {
+            flexDirection: "column",
+            alignItems: "flex-start"
+        }
     },
 
     button: {
         textTransform: "none",
         color: "#795548",
-        backgroundColor: "#d3d3de"
+        backgroundColor: "#d3d3de",
+        margin: "0 0.2rem",
+        [theme.breakpoints.down('sm')] : {
+            width: "30px",
+            height: "30px"
+        }
     },
 
     price: {
         flexGrow: 1,
-        marginLeft: "0.6rem"
+        marginLeft: "0.6rem",
+        [theme.breakpoints.down('sm')] : {
+            flexGrow: 0,
+            marginLeft: "0.5rem"
+        }
+    },
+
+    name: {
+        [theme.breakpoints.down('sm')] : {
+            fontSize: "1rem"
+        }
     }
-  });
+  }));
 
 const Menu = () => {
     const dispatch =useDispatch()
@@ -93,19 +115,20 @@ const Menu = () => {
 
     return (
         <Grid spacing={2} container>
-            <Grid item xs={8}>
+            <Grid item md={8} xs={12}>
                 <Paper elevation={0}>
                     <Grid container spacing={2}>
                         {menu && menu.map(item => (
-                            <Grid key={item.id} item xs={4}>
+                            <Grid key={item.id} item md={4} xs={6}>
                                 <Card className={classes.root} variant="outlined">
                                     <CardContent>
-                                        <Typography variant="h5" component="h2">
+                                        <Typography className={classes.name} variant="h5" component="h2">
                                             {item.name}
                                         </Typography>
                                     </CardContent>
                                     <CardActions className={classes.action}>
                                         <Typography className={classes.price} variant="caption" component="p">KES {item.price}.00</Typography>
+                                        <Box>
                                         {checkQuantity(item.name) ? (
                                             <IconButton
                                             onClick = {() => handleRemoveFromCart(item.name)}
@@ -118,6 +141,7 @@ const Menu = () => {
                                         className={classes.button}>
                                         <AddIcon fontSize="small" />
                                         </IconButton>
+                                        </Box>
                                     </CardActions>
                                 </Card>
                             </Grid>
@@ -125,7 +149,7 @@ const Menu = () => {
                     </Grid>
                 </Paper>
             </Grid>
-            <Grid item xs={4}>
+            <Grid item md={4} xs={12}>
                 <Paper elevation={0}>
                     <Checkout
                     data={data}

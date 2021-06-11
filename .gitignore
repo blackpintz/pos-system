@@ -32,3 +32,8 @@ yarn-error.log*
 
 # vercel
 .vercel
+.npmignore
+handler.js
+.serverless/
+.serverless_nextjs/
+todo.js
