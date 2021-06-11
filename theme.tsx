@@ -6,6 +6,14 @@ const theme = createMuiTheme({
     background: {
       default: '#fffff0',
     }
+  },
+  overrides: {
+    MuiDialog: {
+      paper: {
+        margin: "12px",
+        minWidth: "250px"
+      }
+    }
   }
 });
 

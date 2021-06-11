@@ -9,7 +9,7 @@ import {useDispatch} from 'react-redux';
 import {addOrderItemToDB} from '../actions/orders'
 import countryCodes from '../store/countryCodes';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
     button: {
         marginTop: "2rem",
         width: "90%",
@@ -26,7 +26,16 @@ const useStyles = makeStyles(() => ({
 
     phoneBox: {
         marginLeft: "1rem",
-        width: "250px"
+        width: "250px",
+        [theme.breakpoints.down('sm')] : {
+            margin: "0.4rem 0"
+        }
+    },
+
+    dialog: {
+        [theme.breakpoints.down('sm')] : {
+            minWidth: "290px"
+        }
     }
 }))
 
@@ -73,7 +82,7 @@ const Checkout = (props: any) => {
 
     const orderData = {
         orders: data,
-        phoneNumber: `${code}${phone}`,
+        phoneNumber: phone.toString().charAt(0) === "0" ? `${code}${phone.toString().substring(1)}` : `${code}${phone}`,
         total: handleTotal(),
         created_at: new Date().toISOString(),
         completed: false,
@@ -81,7 +90,8 @@ const Checkout = (props: any) => {
     }
 
     const handleOrders = () => {
-        if(phone.length !== 9) {
+        let str = phone.toString()
+        if((str.charAt(0) !== "0" && str.length !== 9) || (str.charAt(0) === "0" && str.length !== 10)) {
             setInValid(true);
         } else {
             dispatch(addOrderItemToDB(orderData))
@@ -171,7 +181,7 @@ const Checkout = (props: any) => {
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Sign up</DialogTitle>
-                <DialogContent>
+                <DialogContent  className={classes.dialog}>
                     <DialogContentText>Please sign up with your phone number.</DialogContentText>
                         <TextField
                         id="standard-select-phone-code"
