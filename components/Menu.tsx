@@ -10,7 +10,7 @@ import Checkout from './Checkout';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      minWidth: 100,
+      minWidth: 75,
       [theme.breakpoints.down('sm')] : {
           minWidth: 50,
       }
@@ -132,7 +132,7 @@ const Menu = () => {
                 <Paper elevation={0}>
                     <Grid container spacing={1}>
                         {menu && menu.map(item => (
-                            <Grid key={item.id} item md={2} xs={4}>
+                            <Grid key={item.id} item md={3} xs={4}>
                                 <Card className={classes.root} variant="outlined">
                                     <CardContent>
                                         <Typography className={classes.category} >

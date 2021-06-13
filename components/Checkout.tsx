@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {TableContainer, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
-Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Collapse} from '@material-ui/core' 
+Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Collapse} from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
     phoneBox: {
         marginLeft: "1rem",
-        width: "250px",
+        width: "100%",
         [theme.breakpoints.down('sm')] : {
             margin: "0.4rem 0"
         }
@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
 
     dialog: {
         [theme.breakpoints.down('sm')] : {
-            minWidth: "290px"
+            minWidth: "100px"
         }
     }
 }))
@@ -54,7 +54,7 @@ const Checkout = (props: any) => {
        id: string,
        name: string,
        price: number,
-       quantity: number 
+       quantity: number
     }
 
 
@@ -75,7 +75,7 @@ const Checkout = (props: any) => {
     const handleOpen = () => {
         setOpen(true);
       };
-    
+
     const handleClose = () => {
         setOpen(false);
     }
@@ -172,8 +172,8 @@ const Checkout = (props: any) => {
         </TableContainer>
         <Box display="flex" justifyContent="center">
             <Button
-            className={classes.button} 
-            variant="contained" 
+            className={classes.button}
+            variant="contained"
             color="primary"
             onClick={handleOpen}
             disabled={data.length === 0}>
@@ -188,7 +188,7 @@ const Checkout = (props: any) => {
                         select
                         label='Select'
                         value={code}
-                        onChange={(e) =>{setCode(e.target.value)}} 
+                        onChange={(e) =>{setCode(e.target.value)}}
                         variant="outlined"
                         SelectProps={{
                             native: true,
@@ -197,16 +197,16 @@ const Checkout = (props: any) => {
                             <option key={code.value} value={code.value}>{code.label}</option>
                         ))}
                         </TextField>
-                        <TextField 
+                        <TextField
                         placeholder="Enter your phone number"
                         required
                         value={phone}
                         type="number"
                         variant="outlined"
-                        onChange={(e) =>{setPhone(e.target.value)}} 
+                        onChange={(e) =>{setPhone(e.target.value)}}
                         className={classes.phoneBox}
                         />
-                        <Box mt={2}>
+                        <Box mt={1}>
                             <Collapse in={Invalid}>
                                 <Alert
                                 severity="error"
@@ -229,8 +229,8 @@ const Checkout = (props: any) => {
                         </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">Cancel</Button>
-                    <Button onClick={handleOrders} color="primary">Signup</Button>
+                    <Button onClick={handleClose} variant="outlined" color="primary">Cancel</Button>
+                    <Button onClick={handleOrders} variant="outlined"  color="primary">Submit</Button>
                 </DialogActions>
             </Dialog>
         </Box>
@@ -238,7 +238,7 @@ const Checkout = (props: any) => {
             <Button
             onClick={handleDeleteAll}
             className={classes.resetBtn}
-            variant="outlined" 
+            variant="outlined"
             color="secondary"
             disabled={data.length === 0}>
                 Reset Order
