@@ -10,44 +10,53 @@ import Checkout from './Checkout';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      minWidth: 275,
+      minWidth: 100,
       [theme.breakpoints.down('sm')] : {
-          minWidth: 100,
+          minWidth: 50,
       }
     },
 
     action: {
-        width: "100%",
-        display: "flex",
-        [theme.breakpoints.down('sm')] : {
-            flexDirection: "column",
-            alignItems: "flex-start"
-        }
+        // width: "50%",
+        // display: "flex",
+        // [theme.breakpoints.down('sm')] : {
+        //     flexDirection: "column",
+        //     alignItems: "flex-start"
+        // }
     },
 
     button: {
         textTransform: "none",
         color: "#795548",
         backgroundColor: "#d3d3de",
-        margin: "0 0.2rem",
+        margin: "0rem",
         [theme.breakpoints.down('sm')] : {
-            width: "30px",
-            height: "30px"
+            width: "10px",
+            height: "10px"
         }
     },
 
     price: {
         flexGrow: 1,
-        marginLeft: "0.6rem",
+        fontSize: "1rem",
+        margin: "0rem",
         [theme.breakpoints.down('sm')] : {
             flexGrow: 0,
-            marginLeft: "0.5rem"
+            fontSize: "0.5rem",
         }
     },
 
     name: {
+      fontSize: "1rem",
+      margin: "0 0",
         [theme.breakpoints.down('sm')] : {
             fontSize: "1rem"
+        }},
+    category: {
+      fontSize: ".77rem",
+      margin: "0 0",
+        [theme.breakpoints.down('sm')] : {
+            fontSize: ".55rem"
         }
     }
   }));
@@ -102,7 +111,7 @@ const Menu = () => {
 
     const checkQuantity = (name: string) => {
         const foundItem = data.find(element => element.name === name)
-        return foundItem === undefined ? false : foundItem.quantity > 1
+        return foundItem === undefined ? false : foundItem.quantity > 0
     }
 
     const handleDeleteAll = () => {
@@ -110,42 +119,47 @@ const Menu = () => {
     }
 
     const handleRemoveFromCart = (name: string) => {
+        if(data.some((item: {id: string, name: string, price: number, quantity: number})=> item.quantity === 1)){
+        setData(data => data.filter(item => item.name !== name))
+      } else {
         setData(data => data.map(item => item.name === name ? {...item, quantity: item.quantity - 1} : item))
+      }
     }
 
     return (
-        <Grid spacing={2} container>
+        <Grid spacing={1} container>
             <Grid item md={8} xs={12}>
                 <Paper elevation={0}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1}>
                         {menu && menu.map(item => (
-                            <Grid key={item.id} item md={4} xs={6}>
+                            <Grid key={item.id} item md={2} xs={4}>
                                 <Card className={classes.root} variant="outlined">
                                     <CardContent>
-                                        <Typography className={classes.name} variant="h5" component="h2">
+                                        <Typography className={classes.category} >
+                                            {item.category}
+                                        </Typography>
+                                        <Typography className={classes.name} variant="outlined" >
                                             {item.name}
                                         </Typography>
+                                        <Typography className={classes.price} >KES {item.price}.00</Typography>
                                     </CardContent>
                                     <CardActions className={classes.action}>
-                                        <Typography className={classes.price} variant="caption" component="p">KES {item.price}.00</Typography>
-                                        <Box>
-                                        {checkQuantity(item.name) ? (
-                                            <IconButton
-                                            onClick = {() => handleRemoveFromCart(item.name)}
+                                          <IconButton
+                                            onClick = {() => handleCart(item.price, item.name)}
                                             className={classes.button}>
-                                                <RemoveIcon fontSize="small"/>
-                                            </IconButton>
-                                        ) : (<></>)}
-                                        <IconButton
-                                        onClick = {() => handleCart(item.price, item.name)}
-                                        className={classes.button}>
-                                        <AddIcon fontSize="small" />
-                                        </IconButton>
-                                        </Box>
+                                            <AddIcon fontSize="small" />
+                                          </IconButton>
+                                          {checkQuantity(item.name) ? (
+                                              <IconButton
+                                                onClick = {() => handleRemoveFromCart(item.name)}
+                                                className={classes.button}>
+                                                    <RemoveIcon fontSize="small"/>
+                                                </IconButton>
+                                            ) : (<></>)}
                                     </CardActions>
                                 </Card>
                             </Grid>
-                        ))}
+                          ))}
                     </Grid>
                 </Paper>
             </Grid>
