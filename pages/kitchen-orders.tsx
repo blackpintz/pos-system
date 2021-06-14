@@ -1,17 +1,40 @@
-import React, {useState, useEffect} from 'react';
-import {Card, CardContent, CardActions, Checkbox, Grid, Typography} from '@material-ui/core';
+import React, { useEffect} from 'react';
+import {Card, CardContent, CardActions, Grid, Typography, Button, Fade} from '@material-ui/core';
+import DoneIcon from '@material-ui/icons/Done';
+import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import { fetchIncompleteOrdersFromDB } from '../actions/orders';
+import { fetchIncompleteOrdersFromDB, updateDB } from '../actions/orders';
 
+const useStyles = makeStyles(() => ({
+    button : {
+        backgroundColor: "#76ff03",
+        color: "#fff",
+        "&:hover": {
+            backgroundColor: "#76ff03",
+            color: "#fff"
+        }
+    }
+  }))
+
+interface order {
+    id: string | null,
+    orders: any[],
+    phoneNumber: string,
+    total: number,
+    created_at: string,
+    completed: boolean,
+    completed_time: string
+}
 
 const Kitchen = () => {
-    const dispatch =useDispatch()
-    const [checked, setChecked] = useState(false)
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setChecked(event.target.checked);
-        if(!checked) {
-            console.log("it is checked!")
-        }
+    const classes = useStyles();
+    const dispatch =useDispatch();
+    const handleUpdate = (id: string | null, orderToUpdate: order) => {
+           const orderToDispatch = {
+               ...orderToUpdate,
+               completed: true
+           }
+           dispatch(updateDB(id, orderToDispatch))   
       };
     
     interface RootState {
@@ -26,7 +49,7 @@ const Kitchen = () => {
         }]
     }
 
-    const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '')
+    const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
     
     useEffect(() => {
         dispatch(fetchIncompleteOrdersFromDB());
@@ -37,7 +60,8 @@ const Kitchen = () => {
         <Typography variant="h5" gutterBottom>Kitchen Orders</Typography> 
         <Grid spacing={1} container>
             {orders && orders.map(order => (
-                <Grid item md={3} key={order.id}>
+                <Fade key={order.id} in={!order.completed} timeout={4000}>
+                <Grid item md={3} >
                     <Card>
                         <CardContent>
                         <h4>{order.phoneNumber}</h4>
@@ -46,15 +70,25 @@ const Kitchen = () => {
                                 <li key={item.id}>{item.quantity} {item.name}</li>
                             ))}
                         </ul>
+                        <h4>Price of order: Kes.{order.total}</h4>
                         </CardContent>
                         <CardActions>
-                            <h4>Price of order: Kes.{order.total}</h4>
-                            <Checkbox
-                            checked={checked}
-                            onChange={handleChange} />
+                            {!order.completed ? (
+                            <Button 
+                            onClick={() => handleUpdate(order.id, order) }
+                            variant="outlined" 
+                            color="primary">Mark as complete</Button>
+                            ) : (
+                                <Button 
+                                variant="contained" 
+                                className={classes.button}
+                                startIcon={<DoneIcon />}>Order Completed</Button>
+                            )}
+
                         </CardActions>
                     </Card>
                 </Grid>
+                </Fade>
             ))}
         </Grid>
         </>

@@ -75,3 +75,17 @@ export const fetchIncompleteOrdersFromDB = () => (
         })
     }
 )
+
+const updateOrder = (id: string | null, updates: orderWithID) => ({
+    type: "UPDATE_ORDER",
+    id,
+    updates
+})
+
+export const updateDB = (id: string | null, updates: orderWithID) => (
+    (dispatch: any) => (
+        database.ref(`VeganOrders/${id}`).update(updates).then(() => {
+            dispatch(updateOrder(id, updates))
+        })
+    )
+)
