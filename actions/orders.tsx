@@ -9,12 +9,15 @@ interface order {
     completed_time: string
 }
 
-// interface orderItem {
-//     id: string,
-//     name: string,
-//     price: number,
-//     quantity: number
-// }
+interface orderWithID {
+    id: string | null,
+    orders: any[],
+    phoneNumber: string,
+    total: number,
+    created_at: string,
+    completed: boolean,
+    completed_time: string
+}
 
 
 const addOrderItem = (item: {
@@ -39,4 +42,36 @@ export const addOrderItemToDB = (itemData: order) => (
             }))
         })
     )
+)
+
+const fetchIncompleteOrderItems = (orderData: [orderWithID]) => ({
+    type: "FETCH_INCOMPLETE_ORDERS",
+    orderData
+})
+
+export const fetchIncompleteOrdersFromDB = () => (
+    (dispatch: any) => {
+        return database.ref('VeganOrders').once('value').then((snapshot) => {
+            const Orders: [orderWithID] = [
+                {
+                    id: '', 
+                    orders: [], 
+                    phoneNumber: '', 
+                    total: 0, 
+                    created_at: "",
+                    completed: false,
+                    completed_time: ""
+                }
+            ]
+            snapshot.forEach((childSnapshot) => {
+                if(!childSnapshot.val().completed) {
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
+                dispatch(fetchIncompleteOrderItems(Orders))
+            })
+        })
+    }
 )

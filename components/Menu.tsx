@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import {Grid, Paper, Typography, Card, CardContent, CardActions, IconButton, Box} from '@material-ui/core';
+import {Grid, Paper, Typography, Card, CardContent, CardActions, IconButton} from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
 import { makeStyles } from '@material-ui/core/styles';
@@ -138,7 +138,7 @@ const Menu = () => {
                                         <Typography className={classes.category} >
                                             {item.category}
                                         </Typography>
-                                        <Typography className={classes.name} variant="outlined" >
+                                        <Typography className={classes.name} >
                                             {item.name}
                                         </Typography>
                                         <Typography className={classes.price} >KES {item.price}.00</Typography>
