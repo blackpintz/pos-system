@@ -9,7 +9,7 @@ const ConfigureStore = () => {
     const store = createStore(
         combineReducers({
             Menu: menuReducers,
-            Order: orderReducers
+            Orders: orderReducers
         }),
         composeWithDevTools(applyMiddleware(thunk))
     )
