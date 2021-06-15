@@ -1,17 +1,32 @@
 import React, { useEffect} from 'react';
-import {Card, CardContent, CardActions, Grid, Typography, Button, Fade} from '@material-ui/core';
+import {Card, CardContent, CardActions, Grid, Typography, Button} from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchIncompleteOrdersFromDB, updateDB } from '../actions/orders';
 
-const useStyles = makeStyles(() => ({
-    button : {
+const useStyles = makeStyles(theme => ({
+    completeButton : {
         backgroundColor: "#76ff03",
         color: "#fff",
         "&:hover": {
             backgroundColor: "#76ff03",
             color: "#fff"
+        },
+        [theme.breakpoints.down('sm')] : {
+            fontSize: "0.7rem"
+        }
+    },
+    grid: {
+        width: "96%",
+        margin: "0 auto"
+    },
+    markButton: {
+        [theme.breakpoints.down('sm')] : {
+            width: "80px",
+            height: "auto",
+            fontSize: "0.7rem",
+            margin: "0 auto"
         }
     }
   }))
@@ -34,7 +49,10 @@ const Kitchen = () => {
                ...orderToUpdate,
                completed: true
            }
-           dispatch(updateDB(id, orderToDispatch))   
+           dispatch(updateDB(id, orderToDispatch));
+           setInterval(() => {
+            dispatch(fetchIncompleteOrdersFromDB()); 
+          }, 2000);    
       };
     
     interface RootState {
@@ -55,13 +73,13 @@ const Kitchen = () => {
         dispatch(fetchIncompleteOrdersFromDB());
     }, [])
 
+
     return (
         <>
-        <Typography variant="h5" gutterBottom>Kitchen Orders</Typography> 
-        <Grid spacing={1} container>
+        <Typography align="center" variant="h5" gutterBottom>Kitchen Orders</Typography> 
+        <Grid className={classes.grid} spacing={1} container>
             {orders && orders.map(order => (
-                <Fade key={order.id} in={!order.completed} timeout={4000}>
-                <Grid item md={3} >
+                <Grid item md={3} xs={6} key={order.id} >
                     <Card>
                         <CardContent>
                         <h4>{order.phoneNumber}</h4>
@@ -74,21 +92,21 @@ const Kitchen = () => {
                         </CardContent>
                         <CardActions>
                             {!order.completed ? (
-                            <Button 
+                            <Button
+                            className={classes.markButton} 
                             onClick={() => handleUpdate(order.id, order) }
                             variant="outlined" 
                             color="primary">Mark as complete</Button>
                             ) : (
                                 <Button 
                                 variant="contained" 
-                                className={classes.button}
+                                className={classes.completeButton}
                                 startIcon={<DoneIcon />}>Order Completed</Button>
                             )}
 
                         </CardActions>
                     </Card>
                 </Grid>
-                </Fade>
             ))}
         </Grid>
         </>
