@@ -7,7 +7,8 @@ import { fetchIncompleteOrdersFromDB, updateDB } from '../actions/orders';
 
 const useStyles = makeStyles(() => ({
     button : {
-        backgroundColor: "#76ff03",
+        position: "absolute", right: "1rem", marginBottom: "2rem",
+        backgroundColor: "#000",
         color: "#fff",
         "&:hover": {
             backgroundColor: "#76ff03",
@@ -34,9 +35,9 @@ const Kitchen = () => {
                ...orderToUpdate,
                completed: true
            }
-           dispatch(updateDB(id, orderToDispatch))   
+           dispatch(updateDB(id, orderToDispatch))
       };
-    
+
     interface RootState {
         Orders: [{
             id: string | null,
@@ -50,21 +51,27 @@ const Kitchen = () => {
     }
 
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
-    
+
     useEffect(() => {
         dispatch(fetchIncompleteOrdersFromDB());
     }, [])
-
+    var re = /^[0-9]$/g
     return (
         <>
-        <Typography variant="h5" gutterBottom>Kitchen Orders</Typography> 
+        <Typography variant="h5" gutterBottom>Kitchen Orders</Typography>
         <Grid spacing={1} container>
+        <Grid md={6} xs={12} item>
+          <Typography variant="p" gutterBottom>here will go the kitch counter, the time since the next order that is up has been in the system.  Also count the number of orders</Typography>
+        </Grid>
+        <Grid md={6} xs={12} item>
             {orders && orders.map(order => (
-                <Fade key={order.id} in={!order.completed} timeout={4000}>
-                <Grid item md={3} >
+                <Fade key={order.id} in={!order.completed} timeout={2000}>
+                <Grid container spacing={1} >
+                <Grid item md={12} xs={12} >
                     <Card>
                         <CardContent>
-                        <h4>{order.phoneNumber}</h4>
+                        <h4>{order.phoneNumber} - Would be nice to know customer name too</h4>
+                        <h2>{order.created_at} - regex to show the TIME</h2>
                         <ul>
                             {order.orders.map(item => (
                                 <li key={item.id}>{item.quantity} {item.name}</li>
@@ -74,13 +81,14 @@ const Kitchen = () => {
                         </CardContent>
                         <CardActions>
                             {!order.completed ? (
-                            <Button 
+                            <Button
                             onClick={() => handleUpdate(order.id, order) }
-                            variant="outlined" 
+                            variant="outlined"
+                            className={classes.button}
                             color="primary">Mark as complete</Button>
                             ) : (
-                                <Button 
-                                variant="contained" 
+                                <Button
+                                variant="contained"
                                 className={classes.button}
                                 startIcon={<DoneIcon />}>Order Completed</Button>
                             )}
@@ -88,8 +96,10 @@ const Kitchen = () => {
                         </CardActions>
                     </Card>
                 </Grid>
+                </Grid>
                 </Fade>
             ))}
+        </Grid>
         </Grid>
         </>
     )
