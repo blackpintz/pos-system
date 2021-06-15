@@ -1,10 +1,9 @@
 import React, { useEffect} from 'react';
 import {Card, CardContent, CardActions, Grid, Typography, Button} from '@material-ui/core';
 import DoneIcon from '@material-ui/icons/Done';
-import pluralize from 'pluralize'
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import { fetchIncompleteOrdersFromDB, updateDB } from '../actions/orders';
+import { fetchCompleteOrdersFromDB, updateDB } from '../actions/orders';
 
 const useStyles = makeStyles(theme => ({
     completeButton : {
@@ -30,7 +29,7 @@ const useStyles = makeStyles(theme => ({
             width: "100px",
             height: "auto",
             fontSize: "0.5rem",
-            margin: "0 auto"
+            margin: "0 auto",
         }
     }
   }))
@@ -45,17 +44,17 @@ interface order {
     completed_time: string
 }
 
-const Kitchen = () => {
+const Accounting = () => {
     const classes = useStyles();
     const dispatch =useDispatch();
     const handleUpdate = (id: string | null, orderToUpdate: order) => {
            const orderToDispatch = {
                ...orderToUpdate,
-               completed: true
+               completed: false
            }
            dispatch(updateDB(id, orderToDispatch));
            setInterval(() => {
-            dispatch(fetchIncompleteOrdersFromDB()); 
+            dispatch(fetchCompleteOrdersFromDB()); 
           }, 2000);    
       };
     
@@ -74,17 +73,13 @@ const Kitchen = () => {
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
     
     useEffect(() => {
-        dispatch(fetchIncompleteOrdersFromDB());
+        dispatch(fetchCompleteOrdersFromDB());
     }, [])
-
-    const checkQuantity = (quantity: number, item: string) => (
-        quantity <= 1 ? `${quantity} ${item}`: `${quantity} ${pluralize(item)}`
-    )
 
 
     return (
         <>
-        <Typography align="center" variant="h5" gutterBottom>Kitchen Orders</Typography> 
+        <Typography align="center" variant="h5" gutterBottom>Completed Orders</Typography> 
         <Grid className={classes.grid} spacing={1} container>
             {orders && orders.map(order => (
                 <Grid item md={3} xs={6} key={order.id} >
@@ -93,23 +88,22 @@ const Kitchen = () => {
                         <h4>{order.phoneNumber}</h4>
                         <ul>
                             {order.orders.map(item => (
-                                <li key={item.id}>{checkQuantity(item.quantity, item.name)}</li>
+                                <li key={item.id}>{item.quantity} {item.name}</li>
                             ))}
                         </ul>
                         <h4>Price of order: Kes.{order.total}</h4>
                         </CardContent>
                         <CardActions>
-                            {!order.completed ? (
+                            {order.completed ? (
                             <Button
                             className={classes.markButton} 
                             onClick={() => handleUpdate(order.id, order) }
-                            variant="outlined" 
-                            color="primary">Mark as complete</Button>
+                            variant="contained">Mark as not complete</Button>
                             ) : (
                                 <Button 
                                 variant="contained" 
                                 className={classes.completeButton}
-                                startIcon={<DoneIcon />}>Order Completed</Button>
+                                startIcon={<DoneIcon />}>Order should appear in the kitchen section!</Button>
                             )}
 
                         </CardActions>
@@ -121,4 +115,4 @@ const Kitchen = () => {
     )
 }
 
-export default Kitchen;
+export default Accounting;
