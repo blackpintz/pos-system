@@ -22,15 +22,55 @@ const useStyles = makeStyles(theme => ({
         width: "96%",
         margin: "0 auto"
     },
+    items: {
+        position: 'block',
+        fontSize: "1.5rem",
+        marginLeft: "0vw",
+        left: 0,
+        textAlign: "left",
+    },
+    phone: {
+      position: "absolute",
+      top: "-1vh",
+      right: "2vw",
+      fontSize: "1.25rem",
+        [theme.breakpoints.down('sm')]:{
+          fontSize: "1rem",
+        }
+    },
+    cost:{
+      position: "absolute",
+      bottom: "1vh",
+      left: "2vw",
+      color: "purple",
+      fontSize: "1.25rem",
+        [theme.breakpoints.down('sm')]:{
+          fontSize: "1rem",
+        }
+    },
+    con:{
+      padding: "3rem",
+    },
+    card: {
+        backgroundColor: "#fff",
+        margin: "0 auto",
+        minHeight: "20vh",
+        position: "relative"
+    },
     markButton: {
-        backgroundColor: "#795548",
+        backgroundColor: "green",
         color: "#fff",
+        position: "absolute",
         borderRadius: "20px",
+        border: 0,
+        // margin: "0 auto",
+        right: "2vw",
+        bottom: "2vh",
+        fontSize: "1.5rem",
+        width: "auto",
+        height: "auto",
         [theme.breakpoints.down('sm')] : {
-            width: "100px",
-            height: "auto",
-            fontSize: "0.5rem",
-            margin: "0 auto"
+            fontSize: "1rem",
         }
     }
   }))
@@ -55,10 +95,10 @@ const Kitchen = () => {
            }
            dispatch(updateDB(id, orderToDispatch));
            setInterval(() => {
-            dispatch(fetchIncompleteOrdersFromDB()); 
-          }, 2000);    
+            dispatch(fetchIncompleteOrdersFromDB());
+          }, 2000);
       };
-    
+
     interface RootState {
         Orders: [{
             id: string | null,
@@ -72,7 +112,7 @@ const Kitchen = () => {
     }
 
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
-    
+
     useEffect(() => {
         dispatch(fetchIncompleteOrdersFromDB());
     }, [])
@@ -84,30 +124,31 @@ const Kitchen = () => {
 
     return (
         <>
-        <Typography align="center" variant="h5" gutterBottom>Kitchen Orders</Typography> 
+        <Typography align="center" variant="h5" gutterBottom>Kitchen Orders</Typography>
         <Grid className={classes.grid} spacing={1} container>
             {orders && orders.map(order => (
-                <Grid item md={3} xs={6} key={order.id} >
-                    <Card>
-                        <CardContent>
-                        <h4>{order.phoneNumber}</h4>
+                <Grid item md={12} xs={12} key={order.id} >
+                    <Card className={classes.card}>
+
+                        <CardContent className={classes.con}>
+                        <h4 className={classes.phone}>{order.phoneNumber}</h4>
                         <ul>
                             {order.orders.map(item => (
-                                <li key={item.id}>{checkQuantity(item.quantity, item.name)}</li>
+                                <h1 className={classes.items} key={item.id}>{checkQuantity(item.quantity, item.name)}</h1>
                             ))}
                         </ul>
-                        <h4>Price of order: Kes.{order.total}</h4>
+                        <h2 className={classes.cost}>Cost: KES.{order.total}</h2>
                         </CardContent>
                         <CardActions>
                             {!order.completed ? (
                             <Button
-                            className={classes.markButton} 
+                            className={classes.markButton}
                             onClick={() => handleUpdate(order.id, order) }
-                            variant="outlined" 
-                            color="primary">Mark as complete</Button>
+                            variant="outlined"
+                            color="primary">Complete</Button>
                             ) : (
-                                <Button 
-                                variant="contained" 
+                                <Button
+                                variant="contained"
                                 className={classes.completeButton}
                                 startIcon={<DoneIcon />}>Order Completed</Button>
                             )}

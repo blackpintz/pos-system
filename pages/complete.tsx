@@ -19,17 +19,18 @@ const useStyles = makeStyles(theme => ({
     },
     grid: {
         width: "96%",
-        margin: "0 auto"
+        margin: "0 auto",
     },
     markButton: {
-        backgroundColor: "#795548",
+        backgroundColor: "red",
         color: "#fff",
         borderRadius: "20px",
         [theme.breakpoints.down('sm')] : {
             width: "100px",
             height: "auto",
             fontSize: "0.5rem",
-            margin: "0 auto",
+            marginLeft: "auto",
+            marginRight: 0,
         }
     }
   }))
@@ -54,10 +55,10 @@ const Accounting = () => {
            }
            dispatch(updateDB(id, orderToDispatch));
            setInterval(() => {
-            dispatch(fetchCompleteOrdersFromDB()); 
-          }, 2000);    
+            dispatch(fetchCompleteOrdersFromDB());
+          }, 2000);
       };
-    
+
     interface RootState {
         Orders: [{
             id: string | null,
@@ -71,7 +72,7 @@ const Accounting = () => {
     }
 
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
-    
+
     useEffect(() => {
         dispatch(fetchCompleteOrdersFromDB());
     }, [])
@@ -79,11 +80,24 @@ const Accounting = () => {
 
     return (
         <>
-        <Typography align="center" variant="h5" gutterBottom>Completed Orders</Typography> 
+        <Typography align="center" variant="h5" gutterBottom>Completed Orders</Typography>
         <Grid className={classes.grid} spacing={1} container>
             {orders && orders.map(order => (
-                <Grid item md={3} xs={6} key={order.id} >
+                <Grid item md={12} xs={12} key={order.id} >
                     <Card>
+                    <CardActions>
+                        {order.completed ? (
+                        <Button
+                        className={classes.markButton}
+                        onClick={() => handleUpdate(order.id, order) }
+                        variant="contained">not complete</Button>
+                        ) : (
+                            <Button
+                            variant="contained"
+                            className={classes.completeButton}
+                            startIcon={<DoneIcon />}>Order should appear in the kitchen section!</Button>
+                        )}
+                    </CardActions>
                         <CardContent>
                         <h4>{order.phoneNumber}</h4>
                         <ul>
@@ -93,20 +107,7 @@ const Accounting = () => {
                         </ul>
                         <h4>Price of order: Kes.{order.total}</h4>
                         </CardContent>
-                        <CardActions>
-                            {order.completed ? (
-                            <Button
-                            className={classes.markButton} 
-                            onClick={() => handleUpdate(order.id, order) }
-                            variant="contained">Mark as not complete</Button>
-                            ) : (
-                                <Button 
-                                variant="contained" 
-                                className={classes.completeButton}
-                                startIcon={<DoneIcon />}>Order should appear in the kitchen section!</Button>
-                            )}
 
-                        </CardActions>
                     </Card>
                 </Grid>
             ))}
