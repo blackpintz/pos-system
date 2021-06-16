@@ -19,20 +19,63 @@ const useStyles = makeStyles(theme => ({
     },
     grid: {
         width: "96%",
+        margin: "0 auto"
+    },
+    items: {
+        position: 'block',
+        marginLeft: "0vw",
+        left: 0,
+        textAlign: "left",
+        fontSize: "0.75rem",
+          [theme.breakpoints.down('sm')]:{
+            fontSize: "1rem",
+          }
+    },
+    phone: {
+      position: "absolute",
+      top: "-1vh",
+      right: "2vw",
+      fontSize: "1rem",
+        [theme.breakpoints.down('sm')]:{
+          fontSize: "1.25rem",
+        }
+    },
+    cost:{
+      position: "absolute",
+      bottom: "0vh",
+      left: "2vw",
+      color: "purple",
+      fontSize: "1.25rem",
+        [theme.breakpoints.down('sm')]:{
+          fontSize: "1rem",
+        }
+    },
+    con:{
+      padding: "3rem",
+    },
+    card: {
+        backgroundColor: "#fff",
         margin: "0 auto",
+        padding: "2rem",
+        minHeight: "20vh",
+        position: "relative"
     },
     markButton: {
         backgroundColor: "red",
         color: "#fff",
+        position: "absolute",
         borderRadius: "20px",
+        border: 0,
+        // margin: "0 auto",
+        left: "2vw",
+        top: "0",
+        fontSize: "1.25rem",
+        width: "auto",
+        height: "auto",
         [theme.breakpoints.down('sm')] : {
-            width: "100px",
-            height: "auto",
-            fontSize: "0.5rem",
-            marginLeft: "auto",
-            marginRight: 0,
-        }
-    }
+            fontSize: "1rem",
+        }}
+
   }))
 
 interface order {
@@ -84,7 +127,7 @@ const Accounting = () => {
         <Grid className={classes.grid} spacing={1} container>
             {orders && orders.map(order => (
                 <Grid item md={12} xs={12} key={order.id} >
-                    <Card>
+                    <Card className={classes.card}>
                     <CardActions>
                         {order.completed ? (
                         <Button
@@ -98,14 +141,14 @@ const Accounting = () => {
                             startIcon={<DoneIcon />}>Order should appear in the kitchen section!</Button>
                         )}
                     </CardActions>
-                        <CardContent>
-                        <h4>{order.phoneNumber}</h4>
+                        <CardContent className={classes.con}>
+                        <h4 className={classes.phone}>{order.phoneNumber}</h4>
                         <ul>
                             {order.orders.map(item => (
-                                <li key={item.id}>{item.quantity} {item.name}</li>
+                                <li className={classes.items} key={item.id}>{item.quantity} {item.name}</li>
                             ))}
                         </ul>
-                        <h4>Price of order: Kes.{order.total}</h4>
+                        <h4 className={classes.cost}>Cost: KES.{order.total}</h4>
                         </CardContent>
 
                     </Card>

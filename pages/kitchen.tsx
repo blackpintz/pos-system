@@ -24,10 +24,13 @@ const useStyles = makeStyles(theme => ({
     },
     items: {
         position: 'block',
-        fontSize: "1.5rem",
         marginLeft: "0vw",
         left: 0,
         textAlign: "left",
+        fontSize: "0.75rem",
+          [theme.breakpoints.down('sm')]:{
+            fontSize: "1rem",
+          }
     },
     phone: {
       position: "absolute",
@@ -38,9 +41,18 @@ const useStyles = makeStyles(theme => ({
           fontSize: "1rem",
         }
     },
+    time: {
+      position: "absolute",
+      top: "-1vh",
+      left: "2vw",
+      fontSize: "1.25rem",
+        [theme.breakpoints.down('sm')]:{
+          fontSize: "1rem",
+        }
+    },
     cost:{
       position: "absolute",
-      bottom: "1vh",
+      bottom: "0vh",
       left: "2vw",
       color: "purple",
       fontSize: "1.25rem",
@@ -55,7 +67,8 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: "#fff",
         margin: "0 auto",
         minHeight: "20vh",
-        position: "relative"
+        position: "relative",
+        padding: "2vh",
     },
     markButton: {
         backgroundColor: "green",
@@ -66,7 +79,7 @@ const useStyles = makeStyles(theme => ({
         // margin: "0 auto",
         right: "2vw",
         bottom: "2vh",
-        fontSize: "1.5rem",
+        fontSize: "1.25rem",
         width: "auto",
         height: "auto",
         [theme.breakpoints.down('sm')] : {
@@ -131,13 +144,14 @@ const Kitchen = () => {
                     <Card className={classes.card}>
 
                         <CardContent className={classes.con}>
+                        <h4 className={classes.time}>{(order.created_at).match(/([0-1]?\d|2[0-3]):(([0-5]\d)).(([0-5]\d))/)}</h4> 
                         <h4 className={classes.phone}>{order.phoneNumber}</h4>
                         <ul>
                             {order.orders.map(item => (
                                 <h1 className={classes.items} key={item.id}>{checkQuantity(item.quantity, item.name)}</h1>
                             ))}
                         </ul>
-                        <h2 className={classes.cost}>Cost: KES.{order.total}</h2>
+                        <h2 className={classes.cost}>KES {order.total}</h2>
                         </CardContent>
                         <CardActions>
                             {!order.completed ? (

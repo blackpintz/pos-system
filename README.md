@@ -19,3 +19,4 @@ if order is paid, should on the accounting page
 create an accounting page that show the status of all paid orders
 use enter button to submit order (phone keyboard)
 add customer name to order (optional)
+fix the time issue on the kitchen tab
