@@ -51,7 +51,7 @@ const fetchIncompleteOrderItems = (orderData: [orderWithID]) => ({
 
 export const fetchIncompleteOrdersFromDB = () => (
     (dispatch: any) => {
-        return database.ref('VeganOrders').once('value').then((snapshot) => {
+        return database.ref('VeganOrders').on('value', (snapshot) => {
             const Orders: [orderWithID] = [
                 {
                     id: '', 
@@ -63,6 +63,7 @@ export const fetchIncompleteOrdersFromDB = () => (
                     completed_time: ""
                 }
             ]
+
             snapshot.forEach((childSnapshot) => {
                 if(!childSnapshot.val().completed) {
                     Orders.push({
@@ -83,7 +84,7 @@ const fetchCompleteOrderItems = (orderData: [orderWithID]) => ({
 
 export const fetchCompleteOrdersFromDB = () => (
     (dispatch: any) => {
-        return database.ref('VeganOrders').once('value').then((snapshot) => {
+        return database.ref('VeganOrders').on('value', (snapshot) => {
             const Orders: [orderWithID] = [
                 {
                     id: '', 
