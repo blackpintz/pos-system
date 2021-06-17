@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
         margin: "0 auto"
     },
     items: {
-        position: 'block',
+        position: 'relative',
         marginLeft: "0vw",
         left: 0,
         textAlign: "left",
@@ -134,8 +134,8 @@ const Kitchen = () => {
         quantity <= 1 ? `${quantity} ${item}`: `${quantity} ${pluralize(item)}`
     )
     const re1 = /(0?[1-9]|1[0-2]):[0-5][0-9]./
-    const re0 = /([0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/
-    const re2 = /([0-1]?\d|2[0-3]):(([0-5]\d)).(([0-5]\d))/
+    // const re0 = /([0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/
+    // const re2 = /([0-1]?\d|2[0-3]):(([0-5]\d)).(([0-5]\d))/
 
     return (
         <>

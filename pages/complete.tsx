@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     },
     items: {
         position: "relative",
-        marginLeft: "0vw",
+        marginLeft: "0",
         left: 0,
         textAlign: "left",
         fontSize: "0.75rem",
@@ -33,8 +33,8 @@ const useStyles = makeStyles(theme => ({
     },
     phone: {
         position: "absolute",
-        top: "-1vh",
-        right: "2vw",
+        top: "-1px",
+        right: "2px",
         fontSize: "1rem",
         [theme.breakpoints.down('sm')]:{
             fontSize: "1.25rem",
@@ -42,9 +42,9 @@ const useStyles = makeStyles(theme => ({
     },
     cost: {
         position: "absolute",
-        bottom: "0vh",
-        left: "2vw",
-        color: "purple",
+        bottom: "0",
+        left: "2px",
+        color: "#9c27b0",
         fontSize: "1.25rem",
         [theme.breakpoints.down('sm')]:{
             fontSize: "1rem",
@@ -61,12 +61,12 @@ const useStyles = makeStyles(theme => ({
         position: "relative"
     },
     markButton : {
-        backgroundColor: "red",
+        backgroundColor: "#f44336",
         color: "#fff",
         position: "absolute",
         borderRadius: "20px",
-        border: 0,
-        left: "2vw",
+        border: "0",
+        left: "2px",
         top: "0",
         fontSize: "1.25rem",
         width: "auto",
