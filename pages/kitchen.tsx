@@ -133,7 +133,9 @@ const Kitchen = () => {
     const checkQuantity = (quantity: number, item: string) => (
         quantity <= 1 ? `${quantity} ${item}`: `${quantity} ${pluralize(item)}`
     )
-
+    const re1 = /(0?[1-9]|1[0-2]):[0-5][0-9]./
+    const re0 = /([0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/
+    const re2 = /([0-1]?\d|2[0-3]):(([0-5]\d)).(([0-5]\d))/
 
     return (
         <>
@@ -144,7 +146,7 @@ const Kitchen = () => {
                     <Card className={classes.card}>
 
                         <CardContent className={classes.con}>
-                        <h4 className={classes.time}>{(order.created_at).match(/([0-1]?\d|2[0-3]):(([0-5]\d)).(([0-5]\d))/)}</h4> 
+                        <h4 className={classes.time}>{(order.created_at).match(re1)}</h4>
                         <h4 className={classes.phone}>{order.phoneNumber}</h4>
                         <ul>
                             {order.orders.map(item => (
