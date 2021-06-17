@@ -6,67 +6,66 @@ import {useDispatch, useSelector} from 'react-redux';
 import { fetchCompleteOrdersFromDB, updateDB } from '../actions/orders';
 
 const useStyles = makeStyles(theme => ({
+    grid: {
+        width: "96%",
+        margin: "0 auto"
+    },
     completeButton : {
         backgroundColor: "#76ff03",
         color: "#fff",
-        "&:hover": {
+        '&:hover': {
             backgroundColor: "#76ff03",
             color: "#fff"
         },
         [theme.breakpoints.down('sm')] : {
             fontSize: "0.7rem"
-        }
-    },
-    grid: {
-        width: "96%",
-        margin: "0 auto"
+        },
     },
     items: {
-        position: 'block',
+        position: "relative",
         marginLeft: "0vw",
         left: 0,
         textAlign: "left",
         fontSize: "0.75rem",
-          [theme.breakpoints.down('sm')]:{
+        [theme.breakpoints.down('sm')]:{
             fontSize: "1rem",
           }
     },
     phone: {
-      position: "absolute",
-      top: "-1vh",
-      right: "2vw",
-      fontSize: "1rem",
+        position: "absolute",
+        top: "-1vh",
+        right: "2vw",
+        fontSize: "1rem",
         [theme.breakpoints.down('sm')]:{
-          fontSize: "1.25rem",
-        }
+            fontSize: "1.25rem",
+          }
     },
-    cost:{
-      position: "absolute",
-      bottom: "0vh",
-      left: "2vw",
-      color: "purple",
-      fontSize: "1.25rem",
+    cost: {
+        position: "absolute",
+        bottom: "0vh",
+        left: "2vw",
+        color: "purple",
+        fontSize: "1.25rem",
         [theme.breakpoints.down('sm')]:{
-          fontSize: "1rem",
-        }
+            fontSize: "1rem",
+          }
     },
-    con:{
-      padding: "3rem",
+    con : {
+        padding: "3rem",
     },
-    card: {
+    card : {
         backgroundColor: "#fff",
         margin: "0 auto",
         padding: "2rem",
         minHeight: "20vh",
         position: "relative"
     },
-    markButton: {
+    markButton : {
         backgroundColor: "red",
         color: "#fff",
         position: "absolute",
         borderRadius: "20px",
         border: 0,
-        // margin: "0 auto",
         left: "2vw",
         top: "0",
         fontSize: "1.25rem",
@@ -74,9 +73,11 @@ const useStyles = makeStyles(theme => ({
         height: "auto",
         [theme.breakpoints.down('sm')] : {
             fontSize: "1rem",
-        }}
+        }
+    }
+}))
 
-  }))
+
 
 interface order {
     id: string | null,
