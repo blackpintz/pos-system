@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch} from 'react-redux';
 import {addOrderItemToDB} from '../actions/orders'
 import countryCodes from '../store/countryCodes';
+import { orderDetails } from '../utilities/utilities';
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -50,17 +51,11 @@ const Checkout = (props: any) => {
     const [notification, setNotification] = useState(false)
 
     const dispatch = useDispatch()
-    interface dataContent {
-       id: string,
-       name: string,
-       price: number,
-       quantity: number
-    }
 
 
     const handleTotal = () => {
         let total = 0
-        data.forEach((item: dataContent) => {
+        data.forEach((item: orderDetails) => {
             let result = item.price * item.quantity
             total += result
         })
@@ -144,7 +139,7 @@ const Checkout = (props: any) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((element: dataContent) => (
+                    {data.map((element: orderDetails) => (
                         <TableRow component="th" key={element.id} scope="row">
                             <TableCell align="center">{element.name}</TableCell>
                             <TableCell align="center">{element.price}</TableCell>
