@@ -16,6 +16,8 @@ const orderReducers = (state = [], action: AnyAction) => {
             return [...action.orderData]
         case 'FETCH_COMPLETE_ORDERS':
             return [...action.orderData]
+        case 'FETCH_PAID_ORDERS':
+            return [...action.orderData]
         case 'UPDATE_ORDER':
             return state.map((order: order) => {
                 if(order.id === action.id) {

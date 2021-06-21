@@ -1,8 +1,9 @@
 import React, { useEffect} from 'react';
-import {Card, CardContent, CardActions, Grid, Typography, Button} from '@material-ui/core';
+import {Card, CardContent, CardActions, Grid, Typography, Button, Chip} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchCompleteOrdersFromDB, updateDB } from '../actions/orders';
+import {order} from '../utilities/utilities';
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -51,7 +52,7 @@ const useStyles = makeStyles(theme => ({
     markButton : {
         backgroundColor: "#f44336",
         color: "#fff",
-        position: "absolute",
+        position: "relative",
         borderRadius: "20px",
         border: "0",
         left: "2px",
@@ -62,42 +63,42 @@ const useStyles = makeStyles(theme => ({
         [theme.breakpoints.down('sm')] : {
             fontSize: "1rem",
         }
+    },
+    paidButton: {
+        backgroundColor: "#8bc34a",
+        color: "#fff",
+        borderRadius: "20px"
+    },
+
+    paidChip: {
+        backgroundColor: "#76ff03",
+        color: "#fff"
     }
 }))
 
 
-
-interface order {
-    id: string | null,
-    orders: any[],
-    phoneNumber: string,
-    total: number,
-    created_at: string,
-    completed: boolean,
-    completed_time: string
-}
-
 const Accounting = () => {
     const classes = useStyles();
     const dispatch =useDispatch();
-    const handleUpdate = (id: string | null, orderToUpdate: order) => {
+    const handleCompleteUpdate = (id: string | null, orderToUpdate: order) => {
            const orderToDispatch = {
                ...orderToUpdate,
-               completed: false
+               completed: false,
+               completed_time: "pending"
            }
            dispatch(updateDB(id, orderToDispatch));
       };
+    
+    const handlePaidUpdate = (id: string | null, orderToUpdate: order) => {
+        const orderToDispatch = {
+            ...orderToUpdate,
+            paid: true
+        }
+        dispatch(updateDB(id, orderToDispatch));
+    }
 
     interface RootState {
-        Orders: [{
-            id: string | null,
-            orders: any[],
-            phoneNumber: string,
-            total: number,
-            created_at: string,
-            completed: boolean,
-            completed_time: string
-        }]
+        Orders: [order]
     }
 
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
@@ -112,13 +113,25 @@ const Accounting = () => {
         <Typography align="center" variant="h5" gutterBottom>Completed Orders</Typography>
         <Grid className={classes.grid} spacing={1} container>
             {orders && orders.map(order => (
-                <Grid item md={12} xs={12} key={order.id} >
+                <Grid item xs={12} key={order.id} >
                     <Card className={classes.card}>
                     <CardActions>
                         <Button
                         className={classes.markButton}
-                        onClick={() => handleUpdate(order.id, order) }
+                        onClick={() => handleCompleteUpdate(order.id, order) }
                         variant="contained">not complete</Button>
+                        {order.paid ? (
+                            <Chip
+                            label="Paid"
+                            className={classes.paidChip} />
+                        ) : (
+                            <Button
+                            className={classes.paidButton}
+                            variant="contained"
+                            onClick={() => handlePaidUpdate(order.id, order) }>
+                                Pay
+                            </Button>
+                        )}
                     </CardActions>
                         <CardContent className={classes.con}>
                         <h4 className={classes.phone}>{order.phoneNumber}</h4>

@@ -6,7 +6,8 @@ interface order {
     total: number,
     created_at: string,
     completed: boolean,
-    completed_time: string
+    completed_time: string,
+    paid: boolean
 }
 
 interface orderWithID {
@@ -16,19 +17,12 @@ interface orderWithID {
     total: number,
     created_at: string,
     completed: boolean,
-    completed_time: string
+    completed_time: string,
+    paid: boolean
 }
 
 
-const addOrderItem = (item: {
-    id: string | null,
-    orders: any[],
-    phoneNumber: string,
-    total: number,
-    created_at: string,
-    completed: boolean,
-    completed_time: string
-} ) => ({
+const addOrderItem = (item: orderWithID ) => ({
     type: "ADD_ORDER",
     item
 })
@@ -60,7 +54,8 @@ export const fetchIncompleteOrdersFromDB = () => (
                     total: 0, 
                     created_at: "",
                     completed: false,
-                    completed_time: ""
+                    completed_time: "",
+                    paid: false
                 }
             ]
 
@@ -93,7 +88,8 @@ export const fetchCompleteOrdersFromDB = () => (
                     total: 0, 
                     created_at: "",
                     completed: false,
-                    completed_time: ""
+                    completed_time: "",
+                    paid: false
                 }
             ]
             snapshot.forEach((childSnapshot) => {
@@ -119,6 +115,39 @@ export const updateDB = (id: string | null, updates: orderWithID) => (
     (dispatch: any) => (
         database.ref(`VeganOrders/${id}`).update(updates).then(() => {
             dispatch(updateOrder(id, updates))
+        })
+    )
+)
+
+const fetchPaidOrders = (orderData: [orderWithID]) => ({
+    type: "FETCH_PAID_ORDERS",
+    orderData
+})
+
+export const fetchPaidOrdersFromDB = () => (
+    (dispatch: any) => (
+        database.ref('VeganOrders').on('value', (snapshot) => {
+            const Orders: [orderWithID] = [
+                {
+                    id: '', 
+                    orders: [], 
+                    phoneNumber: '', 
+                    total: 0, 
+                    created_at: "",
+                    completed: false,
+                    completed_time: "",
+                    paid: false
+                }
+            ]
+            snapshot.forEach((childSnapshot) => {
+                if(childSnapshot.val().paid) {
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
+                dispatch(fetchPaidOrders(Orders))
+            })
         })
     )
 )

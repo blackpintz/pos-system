@@ -1,9 +1,9 @@
 import React, { useEffect} from 'react';
 import {Card, CardContent, CardActions, Grid, Typography, Button} from '@material-ui/core';
-import pluralize from 'pluralize'
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchIncompleteOrdersFromDB, updateDB } from '../actions/orders';
+import {order, checkQuantity} from '../utilities/utilities'
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -76,15 +76,7 @@ const useStyles = makeStyles(theme => ({
     }
   }))
 
-interface order {
-    id: string | null,
-    orders: any[],
-    phoneNumber: string,
-    total: number,
-    created_at: string,
-    completed: boolean,
-    completed_time: string
-}
+
 
 const Kitchen = () => {
     const classes = useStyles();
@@ -92,21 +84,14 @@ const Kitchen = () => {
     const handleUpdate = (id: string | null, orderToUpdate: order) => {
            const orderToDispatch = {
                ...orderToUpdate,
-               completed: true
+               completed: true,
+               completed_time: new Date().toISOString()
            }
            dispatch(updateDB(id, orderToDispatch));
       };
 
     interface RootState {
-        Orders: [{
-            id: string | null,
-            orders: any[],
-            phoneNumber: string,
-            total: number,
-            created_at: string,
-            completed: boolean,
-            completed_time: string
-        }]
+        Orders: [order]
     }
 
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
@@ -115,9 +100,6 @@ const Kitchen = () => {
         dispatch(fetchIncompleteOrdersFromDB());
     }, [])
 
-    const checkQuantity = (quantity: number, item: string) => (
-        quantity <= 1 ? `${quantity} ${item}`: `${quantity} ${pluralize(item)}`
-    )
     const re1 = /(0?[1-9]|1[0-2]):[0-5][0-9]./
     // const re0 = /([0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]/
     // const re2 = /([0-1]?\d|2[0-3]):(([0-5]\d)).(([0-5]\d))/
@@ -127,7 +109,7 @@ const Kitchen = () => {
         <Typography align="center" variant="h5" gutterBottom>Kitchen Orders</Typography>
         <Grid className={classes.grid} spacing={1} container>
             {orders && orders.map(order => (
-                <Grid item md={12} xs={12} key={order.id} >
+                <Grid item xs={12} key={order.id} >
                     <Card className={classes.card}>
 
                         <CardContent className={classes.con}>

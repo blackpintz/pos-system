@@ -86,7 +86,8 @@ const Checkout = (props: any) => {
         total: handleTotal(),
         created_at: new Date().toISOString(),
         completed: false,
-        completed_time: "pending"
+        completed_time: "pending",
+        paid: false
     }
 
     const handleOrders = () => {
