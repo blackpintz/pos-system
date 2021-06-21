@@ -1,6 +1,5 @@
 import React, { useEffect} from 'react';
 import {Card, CardContent, CardActions, Grid, Typography, Button} from '@material-ui/core';
-import DoneIcon from '@material-ui/icons/Done';
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchCompleteOrdersFromDB, updateDB } from '../actions/orders';
@@ -9,17 +8,6 @@ const useStyles = makeStyles(theme => ({
     grid: {
         width: "96%",
         margin: "0 auto"
-    },
-    completeButton : {
-        backgroundColor: "#76ff03",
-        color: "#fff",
-        '&:hover': {
-            backgroundColor: "#76ff03",
-            color: "#fff"
-        },
-        [theme.breakpoints.down('sm')] : {
-            fontSize: "0.7rem"
-        },
     },
     items: {
         position: "relative",
@@ -98,9 +86,6 @@ const Accounting = () => {
                completed: false
            }
            dispatch(updateDB(id, orderToDispatch));
-           setInterval(() => {
-            dispatch(fetchCompleteOrdersFromDB());
-          }, 2000);
       };
 
     interface RootState {
@@ -130,17 +115,10 @@ const Accounting = () => {
                 <Grid item md={12} xs={12} key={order.id} >
                     <Card className={classes.card}>
                     <CardActions>
-                        {order.completed ? (
                         <Button
                         className={classes.markButton}
                         onClick={() => handleUpdate(order.id, order) }
                         variant="contained">not complete</Button>
-                        ) : (
-                            <Button
-                            variant="contained"
-                            className={classes.completeButton}
-                            startIcon={<DoneIcon />}>Order should appear in the kitchen section!</Button>
-                        )}
                     </CardActions>
                         <CardContent className={classes.con}>
                         <h4 className={classes.phone}>{order.phoneNumber}</h4>

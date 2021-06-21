@@ -1,23 +1,11 @@
 import React, { useEffect} from 'react';
 import {Card, CardContent, CardActions, Grid, Typography, Button} from '@material-ui/core';
-import DoneIcon from '@material-ui/icons/Done';
 import pluralize from 'pluralize'
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchIncompleteOrdersFromDB, updateDB } from '../actions/orders';
 
 const useStyles = makeStyles(theme => ({
-    completeButton : {
-        backgroundColor: "#76ff03",
-        color: "#fff",
-        "&:hover": {
-            backgroundColor: "#76ff03",
-            color: "#fff"
-        },
-        [theme.breakpoints.down('sm')] : {
-            fontSize: "0.7rem"
-        }
-    },
     grid: {
         width: "96%",
         margin: "0 auto"
@@ -107,9 +95,6 @@ const Kitchen = () => {
                completed: true
            }
            dispatch(updateDB(id, orderToDispatch));
-           setInterval(() => {
-            dispatch(fetchIncompleteOrdersFromDB());
-          }, 2000);
       };
 
     interface RootState {
@@ -156,19 +141,11 @@ const Kitchen = () => {
                         <h2 className={classes.cost}>KES {order.total}</h2>
                         </CardContent>
                         <CardActions>
-                            {!order.completed ? (
                             <Button
                             className={classes.markButton}
                             onClick={() => handleUpdate(order.id, order) }
                             variant="outlined"
                             color="primary">Complete</Button>
-                            ) : (
-                                <Button
-                                variant="contained"
-                                className={classes.completeButton}
-                                startIcon={<DoneIcon />}>Order Completed</Button>
-                            )}
-
                         </CardActions>
                     </Card>
                 </Grid>
