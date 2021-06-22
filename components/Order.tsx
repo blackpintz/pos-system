@@ -82,7 +82,7 @@ const useStyles = makeStyles(theme => ({
         }
     },
     box:{
-        width: "25%",
+        width: "100%",
         margin: "0 auto",
         backgroundColor: "#3e2723",
         color: "#fff",
@@ -117,18 +117,18 @@ const Order = (props: any) => {
         const diffInSecs = Math.floor((diff % (1000 * 60)) / 1000)
         setMinLapsed(diffInMins)
         setSecLapsed(diffInSecs)
-       }, 1000) 
+       }, 1000)
     })
- 
+
     return (
         <Card className={classes.card}>
             <CardContent className={classes.con}>
                 <Box className={classes.box}>
-                    <Typography variant="h5" align="center">Order Created:</Typography>
+                    <h5 align="center">Order Created:
                     <section className={classes.section}>
-                        <h4>{minLapsed} : {secLapsed}</h4>
-                        <h4>minutes ago.</h4>
-                    </section>
+                        <h2>{minLapsed} : {secLapsed}　</h2>
+                        <h2> minutes ago.</h2>
+                    </section></h5>
                 </Box>
                 <h4 className={classes.time}>{(order.created_at).match(re1)}</h4>
                 <h4 className={classes.phone}>{order.phoneNumber}</h4>
