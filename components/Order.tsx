@@ -124,11 +124,11 @@ const Order = (props: any) => {
         <Card className={classes.card}>
             <CardContent className={classes.con}>
                 <Box className={classes.box}>
-                    <h5 align="center">Order Created:
+                    <Typography align="center" variant="h6">Order Created:</Typography>
                     <section className={classes.section}>
                         <h2>{minLapsed} : {secLapsed}　</h2>
                         <h2> minutes ago.</h2>
-                    </section></h5>
+                    </section>
                 </Box>
                 <h4 className={classes.time}>{(order.created_at).match(re1)}</h4>
                 <h4 className={classes.phone}>{order.phoneNumber}</h4>

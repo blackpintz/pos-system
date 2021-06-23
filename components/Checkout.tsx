@@ -124,7 +124,7 @@ const Checkout = (props: any) => {
                     </IconButton>
                 }
                 >
-                Order successfully created!
+                Thank you for your Order!
                 </Alert>
             </Collapse>
         </Box>
