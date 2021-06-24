@@ -11,7 +11,7 @@ type Props = {
 
 const useStyles = makeStyles<Theme, Props>(theme => ({
     card: {
-        backgroundColor: props => `${props.color}`,
+        backgroundColor: '#E8ECFB',
         margin: "0 auto",
         minHeight: "20vh",
         position: "relative",
@@ -89,10 +89,11 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
         }
     },
     box:{
+        backgroundColor: props => `${props.color}`,
+        transition: "all 0.5s ease-in",
         width: "100%",
         margin: "0 auto",
-        backgroundColor: "#3e2723",
-        color: "#fff",
+        color: "#000",
         padding: "0.5rem 0",
         borderRadius: "10px"
     }

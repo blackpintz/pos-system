@@ -4,11 +4,7 @@ import ColorCard from './ColorCard';
 const Order = (props: any) => {
     const [minLapsed, setMinLapsed] = useState(0)
     const [secLapsed, setSecLapsed] = useState(0)
-    const [greenCard, setGreenCard] = useState(true)
-    const [yellowCard, setYellowCard] = useState(false)
-    const [orangeCard, setOrangeCard] = useState(false)
-    const [redCard, setRedCard] = useState(false)
-
+    const [color, setColor] = useState(false)
     const {order} = props
    useEffect(() => {
        setInterval(() => {
@@ -19,62 +15,25 @@ const Order = (props: any) => {
         const diffInSecs = Math.floor((diff % (1000 * 60)) / 1000)
         setMinLapsed(diffInMins)
         setSecLapsed(diffInSecs)
-       }, 1000)
-       if(minLapsed >= 7) {
-           setGreenCard(false)
-           setYellowCard(true)
-       }
+        const max_time = 20
+        const red = Math.min(Math.floor(Math.abs(diff)/1000/60/max_time*255),255)
+        const green = Math.max(Math.min(255-Math.floor(Math.abs(diff)/1000/60/max_time*255),255),0)
+        const blue = Math.round(Math.min(255-(red+green)/2,0))
+        const opac = Math.round(Math.min(0.1+(Math.abs(diff)/60/1000)/max_time/1.5,1) * 100) / 100
 
-       if(minLapsed >= 10) {
-        setYellowCard(false)
-        setOrangeCard(true)
-       }
+        const colorrgba = `rgba(${red}, ${green}, ${blue},${opac})`
+        setColor(colorrgba)
+      }, 1000)
 
-       if(minLapsed >= 20) {
-           setOrangeCard(false)
-           setRedCard(true)
-       }
     })
 
     return (
         <>
-        {greenCard ? (
-                <ColorCard 
+                <ColorCard
                 order={order}
                 minLapsed={minLapsed}
                 secLapsed={secLapsed}
-                color= "#4caf50" />
-        ) : (
-            <></>
-        )}
-        {yellowCard ? (
-                <ColorCard 
-                order={order}
-                minLapsed={minLapsed}
-                secLapsed={secLapsed}
-                color= "#ffeb3b"/>
-        ) : (
-            <></>
-        )}
-        {orangeCard ? (
-                <ColorCard 
-                order={order}
-                minLapsed={minLapsed}
-                secLapsed={secLapsed}
-                color= "#ff9800"/>
-        ) : (
-            <></>
-        )}
-
-        {redCard ? (
-                <ColorCard 
-                order={order}
-                minLapsed={minLapsed}
-                secLapsed={secLapsed}
-                color= "#f44336"/>
-        ) : (
-            <></>
-        )}
+                color= {color}/>
         </>
     )
 }
