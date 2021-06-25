@@ -141,7 +141,7 @@ const Menu = () => {
                                         <Typography className={classes.name} >
                                             {item.name}
                                         </Typography>
-                                        <Typography className={classes.price} >KES {item.price}.00</Typography>
+                                        <Typography className={classes.price} >KES {item.price}</Typography>
                                     </CardContent>
                                     <CardActions className={classes.action}>
                                           <IconButton

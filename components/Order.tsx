@@ -4,7 +4,7 @@ import ColorCard from './ColorCard';
 const Order = (props: any) => {
     const [minLapsed, setMinLapsed] = useState(0)
     const [secLapsed, setSecLapsed] = useState(0)
-    const [color, setColor] = useState(false)
+    const [color, setColor] = useState('')
     const {order} = props
    useEffect(() => {
        setInterval(() => {
