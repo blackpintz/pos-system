@@ -5,7 +5,8 @@ const theme = createMuiTheme({
   palette: {
     background: {
       default: '#fffff0',
-    }
+    },
+
   },
   overrides: {
     MuiDialog: {

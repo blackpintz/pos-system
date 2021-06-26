@@ -9,7 +9,8 @@ import {order} from '../utilities/utilities'
 const useStyles = makeStyles(() => ({
     grid: {
         width: "96%",
-        margin: "0 auto"
+        margin: "0 auto",
+        textShadow: "rgba(255,255,255,0.5) 0px 0px 0.25rem",
     }
   }))
 

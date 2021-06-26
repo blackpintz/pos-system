@@ -15,7 +15,7 @@ const Order = (props: any) => {
         const diffInSecs = Math.floor((diff % (1000 * 60)) / 1000)
         setMinLapsed(diffInMins)
         setSecLapsed(diffInSecs)
-        const max_time = 20
+        const max_time = 25
         const red = Math.min(Math.floor(Math.abs(diff)/1000/60/max_time*255),255)
         const green = Math.max(Math.min(255-Math.floor(Math.abs(diff)/1000/60/max_time*255),255),0)
         const blue = Math.round(Math.min(255-(red+green)/2,0))
