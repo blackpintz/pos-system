@@ -28,6 +28,8 @@ const orderReducers = (state = [], action: AnyAction) => {
                 }
                 return order
             })
+        case 'REMOVE_ORDER':
+            return state.filter((x: order) => x.id !== action.id )
         default:
             return state
     }

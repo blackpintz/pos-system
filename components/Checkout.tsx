@@ -1,14 +1,13 @@
 import React, {useState} from 'react'
 import {TableContainer, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
-Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Collapse} from '@material-ui/core'
-import Alert from '@material-ui/lab/Alert';
-import CloseIcon from '@material-ui/icons/Close';
+Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch} from 'react-redux';
 import {addOrderItemToDB} from '../actions/orders'
 import countryCodes from '../store/countryCodes';
 import { orderDetails } from '../utilities/utilities';
+import {AlertMsg} from './Alert';
 
 const useStyles = makeStyles(theme => ({
     button: {
@@ -121,27 +120,11 @@ const Checkout = (props: any) => {
     return (
         <>
         <Typography variant="h6" align="center">Orders</Typography>
-        <Box>
-            <Collapse in={notification}>
-                <Alert
-                variant="filled"
-                action={
-                    <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => {
-                        setNotification(false);
-                    }}
-                    >
-                         <CloseIcon fontSize="inherit" />
-                    </IconButton>
-                }
-                >
-                Thank you for your Order!
-                </Alert>
-            </Collapse>
-        </Box>
+        <AlertMsg 
+        msg="Thank you for your order" 
+        valid={notification} 
+        handleValid={() => setNotification(false)} 
+        type="pass" />
         <TableContainer component={Paper} elevation={0}>
             <Table aria-label="simple table">
                 <TableHead>
@@ -216,27 +199,7 @@ const Checkout = (props: any) => {
                         onChange={(e) =>{setPhone(e.target.value)}}
                         className={classes.phoneBox}
                         />
-                        <Box mt={1} mb={1}>
-                            <Collapse in={Invalid}>
-                                <Alert
-                                severity="error"
-                                action={
-                                    <IconButton
-                                    aria-label="close"
-                                    color="inherit"
-                                    size="small"
-                                    onClick={() => {
-                                        setInValid(false)
-                                    }}
-                                    >
-                                        <CloseIcon />
-                                    </IconButton>
-                                }
-                                >
-                                    Your Phone number is invalid
-                                </Alert>
-                            </Collapse>
-                        </Box>
+                        <AlertMsg msg="Your phone is invalid" valid={Invalid} handleValid={()=>setInValid(false)} type="fail" />
                         <TextField
                         placeholder="Enter your name"
                         type="string"

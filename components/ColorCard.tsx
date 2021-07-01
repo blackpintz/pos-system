@@ -1,9 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import { Card, CardActions, CardContent, Button, Box, Typography} from '@material-ui/core';
+import { Card, CardActions, CardContent, Button, Box, Typography, Dialog, DialogContent,  DialogContentText,
+TextField, DialogActions} from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { updateDB } from '../actions/orders';
+import { updateDB, deleteKitchenOrderFromDB, addDeletedOrderToDB } from '../actions/orders';
 import { checkQuantity, orderDetails, order } from '../utilities/utilities';
+import {AlertMsg} from '../components/Alert'
+
 
 type Props = {
     color: string
@@ -97,6 +100,18 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
         color: "#000",
         padding: "0.5rem 0",
         borderRadius: "10px"
+    },
+    trashButton : {
+        backgroundColor: "#2F4F4F",
+        color: "#fff",
+        position: "absolute",
+        right: "15vw",
+        bottom: "2vh",
+        borderRadius: "20px",
+        [theme.breakpoints.down('sm')] : {
+            right: "2vw",
+            bottom: "10vh",
+        }
     }
 }))
 
@@ -104,6 +119,22 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
 const ColorCard = (props: any) => {
     const classes = useStyles(props);
     const dispatch =useDispatch();
+    const [open, setOpen] = useState(false)
+    const [reason, setReason] = useState('')
+    const [show, setShow] = useState(false)
+
+    const handleOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+    const handleValid = () => {
+        setShow(false)
+    }
+
     const handleUpdate = (id: string | null, orderToUpdate: order) => {
         const orderToDispatch = {
             ...orderToUpdate,
@@ -112,6 +143,21 @@ const ColorCard = (props: any) => {
         }
         dispatch(updateDB(id, orderToDispatch));
    };
+   const handleDelete = (orderToDelete: order) => {
+       if(reason.length < 5) {
+           setShow(true)
+       } else {
+        const orderData = {
+            order: orderToDelete,
+            deleted_at: new Date().toISOString(),
+            reason
+        }
+        dispatch(addDeletedOrderToDB(orderData))
+        dispatch(deleteKitchenOrderFromDB(order.id))
+        setReason('')
+        setOpen(false)
+       }
+   }
    const re1 = /(0?[1-9]|1[0-2]):[0-5][0-9]./
    const {order, minLapsed, secLapsed} = props
     return (
@@ -137,10 +183,35 @@ const ColorCard = (props: any) => {
                <Button
                className={classes.markButton}
                onClick={() => handleUpdate(order.id, order) }
-               variant="outlined"
-               color="primary">
+               variant="outlined">
                    Complete
                </Button>
+               <Button
+               variant="outlined"
+               className={classes.trashButton}
+               onClick={handleOpen}
+               >
+                   Move To Trash
+               </Button>
+               <Dialog open={open} aria-labelledby="form-dialog-title">
+                   <DialogContent>
+                       <DialogContentText>Why are you deleting this order?</DialogContentText>
+                       <TextField
+                       placeholder="Add reason"
+                       type="string"
+                       multiline
+                       fullWidth
+                       variant="outlined"
+                       rows={3}
+                       value={reason}
+                       onChange={(e) =>{setReason(e.target.value)}} />
+                       <AlertMsg valid={show} msg="Please provide a valid reason" handleValid={handleValid} type="fail" />
+                   </DialogContent>
+                   <DialogActions>
+                       <Button onClick={handleClose} variant="outlined" color="primary">Cancel</Button>
+                       <Button onClick={() => handleDelete(order)} variant="outlined"  color="primary">Submit</Button>
+                   </DialogActions>
+               </Dialog>
            </CardActions>
        </Card>
     )

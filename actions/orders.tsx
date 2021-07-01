@@ -1,5 +1,5 @@
 import database from '../firebase/firebase';
-import {order} from '../utilities/utilities'
+import {order, deletedOrder, deletedOrderNoID} from '../utilities/utilities'
 
 interface orderNoID {
     orders: any[],
@@ -146,6 +146,35 @@ export const fetchPaidOrdersFromDB = () => (
                 }
                 dispatch(fetchPaidOrders(Orders))
             })
+        })
+    )
+)
+
+const deleteKitchenOrder = (id: string | null) => ({
+    type: "REMOVE_ORDER",
+    id
+})
+
+export const deleteKitchenOrderFromDB = (id: string | null) => (
+    (dispatch: any) => (
+        database.ref(`VeganOrders/${id}`).remove().then(() => {
+            dispatch(deleteKitchenOrder(id))
+        })
+    )
+)
+
+const addDeletedOrderToTrash = (item: deletedOrder) => ({
+    type: "ADD_ORDER_TO_TRASH",
+    item
+})
+
+export const addDeletedOrderToDB = (itemData: deletedOrderNoID) => (
+    (dispatch: any) => (
+        database.ref('VeganTrash').push(itemData).then((ref) => {
+            dispatch(addDeletedOrderToTrash({
+                id: ref.key,
+                ...itemData
+            }))
         })
     )
 )

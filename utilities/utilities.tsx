@@ -20,6 +20,19 @@ export interface orderDetails {
     quantity: number
  }
 
+ export interface deletedOrderNoID {
+     order: order,
+     deleted_at: string,
+     reason: string
+ }
+
+ export interface deletedOrder {
+    id: string | null,
+    order: order,
+    deleted_at: string,
+    reason: string
+}
+
 export const checkQuantity = (quantity: number, item: string) => {
     const str = item.replace(/ *\([^)]*\) */g, "")
     return quantity <= 1 ? `${quantity} ${str}`: `${quantity} ${pluralize(str)}`
