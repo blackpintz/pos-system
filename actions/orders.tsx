@@ -10,7 +10,22 @@ interface orderNoID {
     completed_time: string,
     paid: boolean,
     name: string,
-    instruction: string
+    instruction: string,
+    deleted: boolean
+}
+
+const initial = {
+    id: '', 
+    orders: [], 
+    phoneNumber: '', 
+    total: 0, 
+    created_at: "",
+    completed: false,
+    completed_time: "",
+    paid: false,
+    name: "",
+    instruction: "",
+    deleted: false
 }
 
 
@@ -38,23 +53,9 @@ const fetchIncompleteOrderItems = (orderData: [order]) => ({
 export const fetchIncompleteOrdersFromDB = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {
-            const Orders: [order] = [
-                {
-                    id: '', 
-                    orders: [], 
-                    phoneNumber: '', 
-                    total: 0, 
-                    created_at: "",
-                    completed: false,
-                    completed_time: "",
-                    paid: false,
-                    name: "",
-                    instruction: ""
-                }
-            ]
-
+            const Orders: [order] = [initial]
             snapshot.forEach((childSnapshot) => {
-                if(!childSnapshot.val().completed) {
+                if(!childSnapshot.val().completed && !childSnapshot.val().deleted) {
                     Orders.push({
                         id: childSnapshot.key,
                         ...childSnapshot.val()
@@ -74,20 +75,7 @@ const fetchCompleteOrderItems = (orderData: [order]) => ({
 export const fetchCompleteOrdersFromDB = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {
-            const Orders: [order] = [
-                {
-                    id: '', 
-                    orders: [], 
-                    phoneNumber: '', 
-                    total: 0, 
-                    created_at: "",
-                    completed: false,
-                    completed_time: "",
-                    paid: false,
-                    name: "",
-                    instruction: ""
-                }
-            ]
+            const Orders: [order] = [initial]
             snapshot.forEach((childSnapshot) => {
                 if(childSnapshot.val().completed) {
                     Orders.push({
@@ -123,20 +111,7 @@ const fetchPaidOrders = (orderData: [order]) => ({
 export const fetchPaidOrdersFromDB = () => (
     (dispatch: any) => (
         database.ref('VeganOrders').on('value', (snapshot) => {
-            const Orders: [order] = [
-                {
-                    id: '', 
-                    orders: [], 
-                    phoneNumber: '', 
-                    total: 0, 
-                    created_at: "",
-                    completed: false,
-                    completed_time: "",
-                    paid: false,
-                    name: "",
-                    instruction: ""
-                }
-            ]
+            const Orders: [order] = [initial]
             snapshot.forEach((childSnapshot) => {
                 if(childSnapshot.val().paid) {
                     Orders.push({
@@ -151,7 +126,7 @@ export const fetchPaidOrdersFromDB = () => (
 )
 
 const deleteKitchenOrder = (id: string | null) => ({
-    type: "REMOVE_ORDER",
+    type: "REMOVE_KITCHEN_ORDER",
     id
 })
 
@@ -159,6 +134,19 @@ export const deleteKitchenOrderFromDB = (id: string | null) => (
     (dispatch: any) => (
         database.ref(`VeganOrders/${id}`).remove().then(() => {
             dispatch(deleteKitchenOrder(id))
+        })
+    )
+)
+
+const deleteTrashOrder = (id: string | null) => ({
+    type: "REMOVE_TRASH_ORDER",
+    id
+})
+
+export const deleteTrashOrderFromDB = (id: string | null) => (
+    (dispatch: any) => (
+        database.ref(`VeganTrash/${id}`).remove().then(() => {
+            dispatch(deleteTrashOrder(id))
         })
     )
 )
@@ -175,6 +163,33 @@ export const addDeletedOrderToDB = (itemData: deletedOrderNoID) => (
                 id: ref.key,
                 ...itemData
             }))
+        })
+    )
+)
+
+const fetchDeleteOrders = (orderData: [deletedOrder]) => ({
+    type: 'FETCH_DELETED_ORDERS',
+    orderData
+})
+
+export const fetchDeletedOrdersFromDB = () => (
+    (dispatch: any) => (
+        database.ref('VeganTrash').on('value', (snapshot) => {
+            const Orders: [deletedOrder] = [
+                {
+                    id: '',
+                    order: initial,
+                    deleted_at: '',
+                    reason: ''
+                }
+            ]
+            snapshot.forEach((childSnapshot) => {
+                Orders.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                })
+                dispatch(fetchDeleteOrders(Orders))
+            })
         })
     )
 )

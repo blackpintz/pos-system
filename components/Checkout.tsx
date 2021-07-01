@@ -92,7 +92,8 @@ const Checkout = (props: any) => {
         completed_time: "pending",
         paid: false,
         name: name !== '' ? name : "Anonymous",
-        instruction: instruction !== '' ? instruction : "No preferences"
+        instruction: instruction !== '' ? instruction : "No preferences",
+        deleted: false
 
     }
 

@@ -10,7 +10,8 @@ export interface order {
     completed_time: string,
     paid: boolean,
     name: string,
-    instruction: string
+    instruction: string,
+    deleted: boolean
 }
 
 export interface orderDetails {

@@ -18,6 +18,8 @@ const orderReducers = (state = [], action: AnyAction) => {
             return [...action.orderData]
         case 'FETCH_PAID_ORDERS':
             return [...action.orderData]
+        case 'FETCH_DELETED_ORDERS':
+            return [...action.orderData]
         case 'UPDATE_ORDER':
             return state.map((order: order) => {
                 if(order.id === action.id) {
@@ -28,7 +30,9 @@ const orderReducers = (state = [], action: AnyAction) => {
                 }
                 return order
             })
-        case 'REMOVE_ORDER':
+        case 'REMOVE_KITCHEN_ORDER':
+            return state.filter((x: order) => x.id !== action.id )
+        case 'REMOVE_TRASH_ORDER':
             return state.filter((x: order) => x.id !== action.id )
         default:
             return state

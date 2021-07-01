@@ -3,7 +3,7 @@ import {useDispatch} from 'react-redux';
 import { Card, CardActions, CardContent, Button, Box, Typography, Dialog, DialogContent,  DialogContentText,
 TextField, DialogActions} from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import { updateDB, deleteKitchenOrderFromDB, addDeletedOrderToDB } from '../actions/orders';
+import { updateDB, addDeletedOrderToDB } from '../actions/orders';
 import { checkQuantity, orderDetails, order } from '../utilities/utilities';
 import {AlertMsg} from '../components/Alert'
 
@@ -143,7 +143,7 @@ const ColorCard = (props: any) => {
         }
         dispatch(updateDB(id, orderToDispatch));
    };
-   const handleDelete = (orderToDelete: order) => {
+   const handleDelete = (id: string| null, orderToDelete: order) => {
        if(reason.length < 5) {
            setShow(true)
        } else {
@@ -152,8 +152,12 @@ const ColorCard = (props: any) => {
             deleted_at: new Date().toISOString(),
             reason
         }
+        const orderToDispatch = {
+            ...orderToDelete,
+            deleted: true
+        }
+        dispatch(updateDB(id, orderToDispatch));
         dispatch(addDeletedOrderToDB(orderData))
-        dispatch(deleteKitchenOrderFromDB(order.id))
         setReason('')
         setOpen(false)
        }
@@ -209,7 +213,7 @@ const ColorCard = (props: any) => {
                    </DialogContent>
                    <DialogActions>
                        <Button onClick={handleClose} variant="outlined" color="primary">Cancel</Button>
-                       <Button onClick={() => handleDelete(order)} variant="outlined"  color="primary">Submit</Button>
+                       <Button onClick={() => handleDelete(order.id, order)} variant="outlined"  color="primary">Submit</Button>
                    </DialogActions>
                </Dialog>
            </CardActions>
