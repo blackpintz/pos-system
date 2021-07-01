@@ -1,33 +1,25 @@
-import database from '../firebase/firebase'
+import database from '../firebase/firebase';
+import {order} from '../utilities/utilities'
 
-interface order {
+interface orderNoID {
     orders: any[],
     phoneNumber: string,
     total: number,
     created_at: string,
     completed: boolean,
     completed_time: string,
-    paid: boolean
-}
-
-interface orderWithID {
-    id: string | null,
-    orders: any[],
-    phoneNumber: string,
-    total: number,
-    created_at: string,
-    completed: boolean,
-    completed_time: string,
-    paid: boolean
+    paid: boolean,
+    name: string,
+    instruction: string
 }
 
 
-const addOrderItem = (item: orderWithID ) => ({
+const addOrderItem = (item: order ) => ({
     type: "ADD_ORDER",
     item
 })
 
-export const addOrderItemToDB = (itemData: order) => (
+export const addOrderItemToDB = (itemData: orderNoID) => (
     (dispatch: any) => (
         database.ref('VeganOrders').push(itemData).then((ref) => {
             dispatch(addOrderItem({
@@ -38,7 +30,7 @@ export const addOrderItemToDB = (itemData: order) => (
     )
 )
 
-const fetchIncompleteOrderItems = (orderData: [orderWithID]) => ({
+const fetchIncompleteOrderItems = (orderData: [order]) => ({
     type: "FETCH_INCOMPLETE_ORDERS",
     orderData
 })
@@ -46,7 +38,7 @@ const fetchIncompleteOrderItems = (orderData: [orderWithID]) => ({
 export const fetchIncompleteOrdersFromDB = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {
-            const Orders: [orderWithID] = [
+            const Orders: [order] = [
                 {
                     id: '', 
                     orders: [], 
@@ -55,7 +47,9 @@ export const fetchIncompleteOrdersFromDB = () => (
                     created_at: "",
                     completed: false,
                     completed_time: "",
-                    paid: false
+                    paid: false,
+                    name: "",
+                    instruction: ""
                 }
             ]
 
@@ -72,7 +66,7 @@ export const fetchIncompleteOrdersFromDB = () => (
     }
 )
 
-const fetchCompleteOrderItems = (orderData: [orderWithID]) => ({
+const fetchCompleteOrderItems = (orderData: [order]) => ({
     type: "FETCH_INCOMPLETE_ORDERS",
     orderData
 })
@@ -80,7 +74,7 @@ const fetchCompleteOrderItems = (orderData: [orderWithID]) => ({
 export const fetchCompleteOrdersFromDB = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {
-            const Orders: [orderWithID] = [
+            const Orders: [order] = [
                 {
                     id: '', 
                     orders: [], 
@@ -89,7 +83,9 @@ export const fetchCompleteOrdersFromDB = () => (
                     created_at: "",
                     completed: false,
                     completed_time: "",
-                    paid: false
+                    paid: false,
+                    name: "",
+                    instruction: ""
                 }
             ]
             snapshot.forEach((childSnapshot) => {
@@ -105,13 +101,13 @@ export const fetchCompleteOrdersFromDB = () => (
     }
 )
 
-const updateOrder = (id: string | null, updates: orderWithID) => ({
+const updateOrder = (id: string | null, updates: order) => ({
     type: "UPDATE_ORDER",
     id,
     updates
 })
 
-export const updateDB = (id: string | null, updates: orderWithID) => (
+export const updateDB = (id: string | null, updates: order) => (
     (dispatch: any) => (
         database.ref(`VeganOrders/${id}`).update(updates).then(() => {
             dispatch(updateOrder(id, updates))
@@ -119,7 +115,7 @@ export const updateDB = (id: string | null, updates: orderWithID) => (
     )
 )
 
-const fetchPaidOrders = (orderData: [orderWithID]) => ({
+const fetchPaidOrders = (orderData: [order]) => ({
     type: "FETCH_PAID_ORDERS",
     orderData
 })
@@ -127,7 +123,7 @@ const fetchPaidOrders = (orderData: [orderWithID]) => ({
 export const fetchPaidOrdersFromDB = () => (
     (dispatch: any) => (
         database.ref('VeganOrders').on('value', (snapshot) => {
-            const Orders: [orderWithID] = [
+            const Orders: [order] = [
                 {
                     id: '', 
                     orders: [], 
@@ -136,7 +132,9 @@ export const fetchPaidOrdersFromDB = () => (
                     created_at: "",
                     completed: false,
                     completed_time: "",
-                    paid: false
+                    paid: false,
+                    name: "",
+                    instruction: ""
                 }
             ]
             snapshot.forEach((childSnapshot) => {

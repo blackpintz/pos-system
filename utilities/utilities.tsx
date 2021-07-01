@@ -8,7 +8,9 @@ export interface order {
     created_at: string,
     completed: boolean,
     completed_time: string,
-    paid: boolean
+    paid: boolean,
+    name: string,
+    instruction: string
 }
 
 export interface orderDetails {
@@ -18,6 +20,7 @@ export interface orderDetails {
     quantity: number
  }
 
-export const checkQuantity = (quantity: number, item: string) => (
-    quantity <= 1 ? `${quantity} ${item}`: `${quantity} ${pluralize(item)}`
-)
+export const checkQuantity = (quantity: number, item: string) => {
+    const str = item.replace(/ *\([^)]*\) */g, "")
+    return quantity <= 1 ? `${quantity} ${str}`: `${quantity} ${pluralize(str)}`
+}

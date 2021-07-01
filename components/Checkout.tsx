@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
 
     phoneBox: {
-        marginLeft: "1rem",
+        marginTop: "0.5rem",
         width: "100%",
         [theme.breakpoints.down('sm')] : {
             margin: "0.4rem 0"
@@ -34,9 +34,16 @@ const useStyles = makeStyles(theme => ({
     },
 
     dialog: {
+        padding: "8px 20px",
+        minWidth: "420px",
         [theme.breakpoints.down('sm')] : {
             minWidth: "100px"
         }
+    },
+    instructionsTitle: {
+        backgroundColor: "#D3D3D3",
+        paddingLeft: "0.8rem",
+        margin: "0.5rem 0"
     }
 }))
 
@@ -47,8 +54,10 @@ const Checkout = (props: any) => {
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState('');
     const [code, setCode] = useState('+254');
-    const [Invalid, setInValid] = useState(false)
-    const [notification, setNotification] = useState(false)
+    const [name, setName] = useState('');
+    const [instruction, setInstruction] = useState('')
+    const [Invalid, setInValid] = useState(false);
+    const [notification, setNotification] = useState(false);
 
     const dispatch = useDispatch()
 
@@ -82,7 +91,10 @@ const Checkout = (props: any) => {
         created_at: new Date().toISOString(),
         completed: false,
         completed_time: "pending",
-        paid: false
+        paid: false,
+        name: name !== '' ? name : "Anonymous",
+        instruction: instruction !== '' ? instruction : "No preferences"
+
     }
 
     const handleOrders = () => {
@@ -94,6 +106,8 @@ const Checkout = (props: any) => {
             handleDeleteAll()
             setOpen(false);
             setPhone('');
+            setName('');
+            setInstruction('');
             setCode('+254')
             setInValid(false)
             setNotification(true)
@@ -202,7 +216,7 @@ const Checkout = (props: any) => {
                         onChange={(e) =>{setPhone(e.target.value)}}
                         className={classes.phoneBox}
                         />
-                        <Box mt={1}>
+                        <Box mt={1} mb={1}>
                             <Collapse in={Invalid}>
                                 <Alert
                                 severity="error"
@@ -223,6 +237,23 @@ const Checkout = (props: any) => {
                                 </Alert>
                             </Collapse>
                         </Box>
+                        <TextField
+                        placeholder="Enter your name"
+                        type="string"
+                        value={name}
+                        variant="outlined"
+                        fullWidth
+                        onChange={(e) =>{setName(e.target.value)}} />
+                        <Typography variant="body1" className={classes.instructionsTitle}>Special Instructions</Typography>
+                        <TextField
+                        placeholder="Add preferences (extra sauce, No pepper, etc)"
+                        fullWidth
+                        multiline
+                        value={instruction}
+                        variant="outlined"
+                        type="string"
+                        rows={3}
+                        onChange={(e) =>{setInstruction(e.target.value)}} />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} variant="outlined" color="primary">Cancel</Button>
