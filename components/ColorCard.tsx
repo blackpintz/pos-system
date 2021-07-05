@@ -176,11 +176,15 @@ const ColorCard = (props: any) => {
                </Box>
                <h4 className={classes.time}>{(order.created_at).match(re1)}</h4>
                <h4 className={classes.phone}>{order.phoneNumber}</h4>
+               <h4>Order Created by: {order.name}</h4>
                <ul>
                    {order.orders.map((item: orderDetails) => (
                        <h1 className={classes.items} key={item.id}>{checkQuantity(item.quantity, item.name)}</h1>
                    ))}
                </ul>
+               <Typography variant="body1">
+                   special instructions: {order.instruction}
+               </Typography>
                <h2 className={classes.cost}>KES {order.total}</h2>
            </CardContent>
            <CardActions>
