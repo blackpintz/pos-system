@@ -16,15 +16,6 @@ const useStyles = makeStyles(theme => ({
       }
     },
 
-    action: {
-        // width: "50%",
-        // display: "flex",
-        // [theme.breakpoints.down('sm')] : {
-        //     flexDirection: "column",
-        //     alignItems: "flex-start"
-        // }
-    },
-
     button: {
         textTransform: "none",
         color: "#795548",
@@ -143,7 +134,7 @@ const Menu = () => {
                                         </Typography>
                                         <Typography className={classes.price} >KES {item.price}</Typography>
                                     </CardContent>
-                                    <CardActions className={classes.action}>
+                                    <CardActions>
                                           <IconButton
                                             onClick = {() => handleCart(item.price, item.name)}
                                             className={classes.button}>
