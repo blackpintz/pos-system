@@ -1,6 +1,8 @@
+import React from 'react';
 import {Typography, Box} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Menu from '../components/Menu';
+
 
 const useStyles = makeStyles(() => ({
   grid: {
@@ -11,11 +13,8 @@ const useStyles = makeStyles(() => ({
 
 export default function Home() {
   const classes = useStyles();
-
   // useEffect(() => {
-  //   database.ref('VeganTodoManager').child('TuesdayTodos').push({
-  //     task: "Add the Gourmet menu."
-  //   })
+  //   dispatch(addTaskToDB('WednesdayTodos', {task: "Clean the Kitchen", completed: false, created_at: ""}))
   // }, [])
   return (
     <Box className={classes.grid}>
