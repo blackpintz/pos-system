@@ -1,7 +1,7 @@
 import React from 'react';
 import {Container, Typography, Button, Box, Divider} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useForm } from 'react-hook-form';
+import { useForm} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
 import {addTaskToDB} from '../actions/todos'
 
@@ -10,7 +10,12 @@ type formValues = {
     taskTwo: string,
     taskThree: string,
     taskFour: string,
-    taskFive: string
+    taskFive: string,
+    displayOne: string,
+    displayTwo: string,
+    displayThree: string,
+    displayFour: string,
+    displayFive: string
 }
 
 const useStyles = makeStyles(() => ({
@@ -49,34 +54,44 @@ const DayPlan = (props: any) => {
     const {register, handleSubmit, reset} = useForm<formValues>();
     const {day, title} = props
 
-    const handlingData = (task: string) => {
+    const handlingData = (task: string, displayTime: string) => {
         if(task !== "") {
             const taskData = {
                 task,
                 completed: false,
-                created_at: new Date().toISOString()
+                created_at: new Date().toISOString(),
+                displayTime: displayTime === "" ? "10:00" : displayTime
             }
+            console.log(taskData);
+            console.log(typeof displayTime);
             dispatch(addTaskToDB(day, taskData))
         }
     }
 
     const onSubmit = (data: any) => {
-        const {taskOne, taskTwo, taskThree, taskFour, taskFive} = data
-        handlingData(taskOne);
-        handlingData(taskTwo);
-        handlingData(taskThree);
-        handlingData(taskFour);
-        handlingData(taskFive);
+        const {taskOne, taskTwo, taskThree, taskFour, taskFive, 
+        displayOne, displayTwo, displayThree, displayFour, displayFive} = data
+        handlingData(taskOne, displayOne);
+        handlingData(taskTwo, displayTwo);
+        handlingData(taskThree, displayThree);
+        handlingData(taskFour, displayFour);
+        handlingData(taskFive, displayFive);
         reset();
     }
 
     const InputBox = (props: any) => {
-        const {label, num} = props
+        const {label, num, display} = props
         return (
-            <Box pl={3}>
-                <label>{num}</label>
-                <input {...register(label)} />
+            <Box>
+                <Box pl={3}>
+                    <label>{num}</label>
+                    <input {...register(label)} />
+                    <input {...register(display)} type="time"  />
+                </Box>
+
             </Box>
+
+
         )
     }
 
@@ -84,11 +99,11 @@ const DayPlan = (props: any) => {
         <Container className={classes.container} maxWidth="sm">
              <Typography className={classes.title} variant="h6">{title}</Typography>
              <form onSubmit={handleSubmit(onSubmit)}>
-                 <InputBox label="taskOne" num="1." />
-                 <InputBox label="taskTwo" num="2." />
-                 <InputBox label="taskThree" num="3." />
-                 <InputBox label="taskFour" num="4." />
-                 <InputBox label="taskFive" num="5." />
+                 <InputBox label="taskOne" num="1." display="displayOne" />
+                 <InputBox label="taskTwo" num="2." display="displayTwo" />
+                 <InputBox label="taskThree" num="3." display="displayThree" />
+                 <InputBox label="taskFour" num="4." display="displayFour" />
+                 <InputBox label="taskFive" num="5." display="displayFive" />
                  <Box display="flex" justifyContent="flex-end" width="84%">
                   <Button className={classes.button} variant="contained" color="secondary" type="submit">Add</Button>
                  </Box>
