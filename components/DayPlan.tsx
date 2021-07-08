@@ -62,8 +62,6 @@ const DayPlan = (props: any) => {
                 created_at: new Date().toISOString(),
                 displayTime: displayTime === "" ? "10:00" : displayTime
             }
-            console.log(taskData);
-            console.log(typeof displayTime);
             dispatch(addTaskToDB(day, taskData))
         }
     }
