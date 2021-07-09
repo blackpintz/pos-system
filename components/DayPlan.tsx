@@ -3,7 +3,7 @@ import {Container, Typography, Button, Box, Divider} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useForm} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
-import {addTaskToDB} from '../actions/todos'
+import {addTaskToDB, TaskNoID} from '../actions/todos'
 
 type formValues = {
     taskOne: string,
@@ -52,15 +52,17 @@ const DayPlan = (props: any) => {
     const classes = useStyles();
     const dispatch = useDispatch()
     const {register, handleSubmit, reset} = useForm<formValues>();
-    const {day, title} = props
+    const {day, title, startDate} = props
 
     const handlingData = (task: string, displayTime: string) => {
         if(task !== "") {
-            const taskData = {
+            const taskData: TaskNoID = {
                 task,
                 completed: false,
                 created_at: new Date().toISOString(),
-                displayTime: displayTime === "" ? "10:00" : displayTime
+                displayTime: displayTime === "" ? "10:00" : displayTime,
+                date: startDate,
+                day: title
             }
             dispatch(addTaskToDB(day, taskData))
         }
