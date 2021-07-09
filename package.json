@@ -16,7 +16,6 @@
     "@material-ui/pickers": "^3.3.10",
     "date-fns": "^2.0.0",
     "firebase": "^8.6.4",
-    "framer-motion": "^4.1.17",
     "moment": "^2.29.1",
     "next": "latest",
     "next-redux-wrapper": "^7.0.0",

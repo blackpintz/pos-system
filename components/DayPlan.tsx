@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Container, Typography, Button, Box, Divider} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { useForm} from 'react-hook-form';
+import { useForm, Controller} from 'react-hook-form';
 import {useDispatch} from 'react-redux';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+} from '@material-ui/pickers';
+import moment from 'moment';
 import {addTaskToDB, TaskNoID} from '../actions/todos'
+
 
 type formValues = {
     taskOne: string,
@@ -51,21 +58,31 @@ const useStyles = makeStyles(() => ({
 const DayPlan = (props: any) => {
     const classes = useStyles();
     const dispatch = useDispatch()
-    const {register, handleSubmit, reset} = useForm<formValues>();
+    const {register, handleSubmit, reset, control} = useForm<formValues>();
     const {day, title, startDate} = props
 
-    const handlingData = (task: string, displayTime: string) => {
+    const handlingData = (task: string, displayTime: Date) => {
         if(task !== "") {
             const taskData: TaskNoID = {
                 task,
                 completed: false,
                 created_at: new Date().toISOString(),
-                displayTime: displayTime === "" ? "10:00" : displayTime,
+                displayTime: dateString(displayTime),
                 date: startDate,
                 day: title
             }
             dispatch(addTaskToDB(day, taskData))
         }
+    }
+
+    const dateString = (date: Date) => {
+        let displayTime;
+        if(date === undefined) {
+            displayTime = "10:00 AM"
+        } else {
+            displayTime = moment(date.toISOString()).format('LT')
+        }
+        return displayTime
     }
 
     const onSubmit = (data: any) => {
@@ -81,12 +98,26 @@ const DayPlan = (props: any) => {
 
     const InputBox = (props: any) => {
         const {label, num, display} = props
+        const [time, setTime] = useState<Date | null>(new Date('2021-01-01T10:00:00'))
         return (
             <Box>
                 <Box pl={3}>
                     <label>{num}</label>
                     <input {...register(label)} />
-                    <input {...register(display)} type="time"  />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Controller
+                        control={control}
+                        name={display}
+                        render={({field: {onChange}}) => (
+                            <KeyboardTimePicker
+                            onChange={(date: Date | null) =>{
+                                onChange(date)
+                                setTime(date)
+                            }}
+                            value={time} />
+                        )} />
+                    </MuiPickersUtilsProvider>
+                    {/* <input {...register(display)} type="time"  /> */}
                 </Box>
 
             </Box>
