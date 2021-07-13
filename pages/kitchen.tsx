@@ -44,14 +44,14 @@ const Kitchen = () => {
         <>
         <Typography align="center" variant="h5" gutterBottom>Kitchen Orders</Typography>
         <Grid className={classes.grid} spacing={1} container>
+            <Grid item xs={12}>
+                <TodoList tasks={tasks}/>
+            </Grid>
             {orders && orders.map(order => (
                 <Grid item xs={12} key={order.id} >
                     <Order order={order} />
                 </Grid>
             ))}
-            <Grid item xs={12}>
-                <TodoList tasks={tasks}/>
-            </Grid>
         </Grid>
         </>
     )
