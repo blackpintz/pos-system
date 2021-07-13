@@ -33,11 +33,11 @@ const WeeklyPlan = () => {
     return (
         <>
             <Typography className={classes.title} align="center" variant="h5">Weekly Plan</Typography>
-            <DayPlan startDate={moment(new Date(startDate.date)).format('LL')} day="MondayTodos" title="Monday" />
-            <DayPlan startDate={moment(new Date(startDate.date)).add(1, 'days').format('LL')} day="TuesdayTodos" title="Tuesday" />
-            <DayPlan startDate={moment(new Date(startDate.date)).add(2, 'days').format('LL')} day="WednesdayTodos" title="Wednesday" />
-            <DayPlan startDate={moment(new Date(startDate.date)).add(3, 'days').format('LL')} day="ThursdayTodos" title="Thursday" />
-            <DayPlan startDate={moment(new Date(startDate.date)).add(4, 'days').format('LL')} day="FridayTodos" title="Friday" />
+            <DayPlan startDate={moment(new Date(startDate.date)).format('LL')} day="Monday" />
+            <DayPlan startDate={moment(new Date(startDate.date)).add(1, 'days').format('LL')} day="Tuesday"  />
+            <DayPlan startDate={moment(new Date(startDate.date)).add(2, 'days').format('LL')} day="Wednesday" />
+            <DayPlan startDate={moment(new Date(startDate.date)).add(3, 'days').format('LL')} day="Thursday" />
+            <DayPlan startDate={moment(new Date(startDate.date)).add(4, 'days').format('LL')} day="Friday"/>
         </>
     )
 }

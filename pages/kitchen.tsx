@@ -1,10 +1,13 @@
 import React, { useEffect} from 'react';
 import {Grid, Typography} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
 import { fetchIncompleteOrdersFromDB } from '../actions/orders';
-import Order from '../components/Order'
-import {order} from '../utilities/utilities'
+import { fetchTasksFromDB } from '../actions/todos';
+import Order from '../components/Order';
+import {order, Task} from '../utilities/utilities';
+import TodoList from '../components/TodoList';
 
 const useStyles = makeStyles(() => ({
     grid: {
@@ -20,13 +23,15 @@ const Kitchen = () => {
     const classes = useStyles();
     const dispatch =useDispatch();
     interface RootState {
-        Orders: [order]
+        Orders: [order],
+        Todos: [Task]
     }
 
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
-
+    const tasks = useSelector((state: RootState)=> state.Todos).filter(item => item.id !== '');
     useEffect(() => {
         dispatch(fetchIncompleteOrdersFromDB());
+        dispatch(fetchTasksFromDB(moment().format('dddd')))
     }, [])
 
     return (
@@ -38,6 +43,9 @@ const Kitchen = () => {
                     <Order order={order} />
                 </Grid>
             ))}
+            <Grid item xs={12}>
+                <TodoList tasks={tasks}/>
+            </Grid>
         </Grid>
         </>
     )

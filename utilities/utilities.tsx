@@ -34,6 +34,26 @@ export interface orderDetails {
     reason: string
 }
 
+export interface Task {
+    id: string | null,
+    task: string,
+    completed: boolean,
+    created_at: string,
+    displayTime: string,
+    date: string,
+    day: string
+}
+
+export interface TaskNoID {
+    task: string,
+    completed: boolean,
+    created_at: string,
+    displayTime: string,
+    date: string,
+    day: string
+}
+
+
 export const checkQuantity = (quantity: number, item: string) => {
     const str = item.replace(/ *\([^)]*\) */g, "")
     return quantity <= 1 ? `${quantity} ${str}`: `${quantity} ${pluralize(str)}`

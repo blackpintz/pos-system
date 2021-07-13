@@ -9,7 +9,8 @@ import {
   KeyboardTimePicker,
 } from '@material-ui/pickers';
 import moment from 'moment';
-import {addTaskToDB, TaskNoID} from '../actions/todos'
+import {addTaskToDB} from '../actions/todos';
+import {TaskNoID} from '../utilities/utilities';
 
 
 type formValues = {
@@ -59,7 +60,7 @@ const DayPlan = (props: any) => {
     const classes = useStyles();
     const dispatch = useDispatch()
     const {register, handleSubmit, reset, control} = useForm<formValues>();
-    const {day, title, startDate} = props
+    const {day, startDate} = props
 
     const handlingData = (task: string, displayTime: Date) => {
         if(task !== "") {
@@ -69,7 +70,7 @@ const DayPlan = (props: any) => {
                 created_at: new Date().toISOString(),
                 displayTime: dateString(displayTime),
                 date: startDate,
-                day: title
+                day
             }
             dispatch(addTaskToDB(day, taskData))
         }
@@ -128,7 +129,7 @@ const DayPlan = (props: any) => {
 
     return (
         <Container className={classes.container} maxWidth="sm">
-             <Typography className={classes.title} variant="h6">{title}</Typography>
+             <Typography className={classes.title} variant="h6">{day}</Typography>
              <form onSubmit={handleSubmit(onSubmit)}>
                  <InputBox label="taskOne" num="1." display="displayOne" />
                  <InputBox label="taskTwo" num="2." display="displayTwo" />

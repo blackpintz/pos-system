@@ -1,24 +1,7 @@
 import moment from 'moment';
 import database from '../firebase/firebase';
+import {Task, TaskNoID} from '../utilities/utilities';
 
-interface Task {
-    id: string | null,
-    task: string,
-    completed: boolean,
-    created_at: string,
-    displayTime: string,
-    date: string,
-    day: string
-}
-
-export interface TaskNoID {
-    task: string,
-    completed: boolean,
-    created_at: string,
-    displayTime: string,
-    date: string,
-    day: string
-}
 
 interface WeekDate {
     id: string | null,
@@ -29,6 +12,16 @@ const addTask = (item: Task) => ({
     type: "ADD_TASK",
     item
 })
+
+const initial = {
+    id: '',
+    task: '',
+    completed: false,
+    created_at: '',
+    displayTime: '',
+    date: '',
+    day: ''
+}
 
 export const addTaskToDB = (child: string, itemData: TaskNoID) => (
     (dispatch: any) => (
@@ -59,3 +52,25 @@ export const fetchDateFromDB = () => (
         })
     )
 )
+
+const fetchTaskData = (taskData: [Task]) => ({
+    type: "FETCH_TASK_DATA",
+    taskData
+})
+
+export const fetchTasksFromDB = (child: string) => (
+    (dispatch: any) => (
+        database.ref('VeganTodoManager').child(child).on('value', (snapshot) => {
+            const Tasks: [Task] = [initial]
+            snapshot.forEach((childSnapshot) => {
+                Tasks.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                })
+                dispatch(fetchTaskData(Tasks))
+            })
+        })
+    )
+)
+
+
