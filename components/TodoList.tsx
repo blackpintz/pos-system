@@ -1,9 +1,15 @@
+import Todo from '../components/Todo';
+import { Task } from '../utilities/utilities';
 
 const TodoList = ({tasks}: any) => {
     console.log(tasks)
     return (
         <>
-            <h1>TodoList goes here!</h1>
+            {tasks.map((task: Task) => (
+                <>
+                <Todo taskItem={task} key={task.id} />
+                </>
+            ))}
         </>
     )
 }

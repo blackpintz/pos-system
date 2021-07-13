@@ -63,10 +63,14 @@ export const fetchTasksFromDB = (child: string) => (
         database.ref('VeganTodoManager').child(child).on('value', (snapshot) => {
             const Tasks: [Task] = [initial]
             snapshot.forEach((childSnapshot) => {
-                Tasks.push({
-                    id: childSnapshot.key,
-                    ...childSnapshot.val()
-                })
+                const time = moment(childSnapshot.val().displayTime, ["h:mm A"]).format("HH:mm")
+                const now = moment().format("HH:mm")
+                if(now >= time) {
+                    Tasks.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
                 dispatch(fetchTaskData(Tasks))
             })
         })
