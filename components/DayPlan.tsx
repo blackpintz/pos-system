@@ -66,11 +66,12 @@ const DayPlan = (props: any) => {
         if(task !== "") {
             const taskData: TaskNoID = {
                 task,
+                day,
                 completed: false,
                 created_at: new Date().toISOString(),
                 displayTime: dateString(displayTime),
                 date: startDate,
-                day
+                completed_at: "Not completed"
             }
             dispatch(addTaskToDB(day, taskData))
         }

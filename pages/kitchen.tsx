@@ -29,11 +29,6 @@ const Kitchen = () => {
 
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
     const tasks = useSelector((state: RootState)=> state.Todos).filter(item => item.id !== '');
-    // const startTime = moment("6:19 PM", ["h:mm A"]).format("HH:mm")
-    // const endTime = moment().format("HH:mm")
-    // console.log(startTime)
-    // console.log(endTime)
-    // console.log(startTime > endTime)
     
     useEffect(() => {
         dispatch(fetchIncompleteOrdersFromDB());

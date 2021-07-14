@@ -41,7 +41,8 @@ export interface Task {
     created_at: string,
     displayTime: string,
     date: string,
-    day: string
+    day: string,
+    completed_at: string
 }
 
 export interface TaskNoID {
@@ -50,7 +51,8 @@ export interface TaskNoID {
     created_at: string,
     displayTime: string,
     date: string,
-    day: string
+    day: string,
+    completed_at: string
 }
 
 
