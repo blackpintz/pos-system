@@ -21,7 +21,8 @@ const initial = {
     displayTime: '',
     date: '',
     day: '',
-    completed_at: ''
+    completed_at: '',
+    added: false
 }
 
 export const addTaskToDB = (child: string, itemData: TaskNoID) => (

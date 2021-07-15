@@ -3,6 +3,7 @@
  import {Typography, Box, Button} from '@material-ui/core';
  import { makeStyles } from '@material-ui/core/styles';
  import moment from 'moment';
+ import {Howl} from 'howler';
  import { updateTaskToDB } from '../actions/todos';
  import { Task } from '../utilities/utilities';
 
@@ -17,8 +18,13 @@
  const Todo = ({taskItem}: any) => {
     const classes = useStyles();
     const dispatch =useDispatch();
-    const {task, displayTime, id, day} = taskItem
+    const {task, displayTime, id, day, added} = taskItem
     const [show, setShow] = useState(false)
+    const sound = new Howl({
+        src: ['audio/play.mp3'],
+        html5: true
+    })
+
   
      useEffect(() => {
          setInterval(() => {
@@ -26,7 +32,10 @@
             const now = moment().format("HH:mm")
             if(now >= time) setShow(true)
          },1000)
-     })
+         if(!added) sound.play()
+         dispatch(updateTaskToDB(day, id, {...taskItem, added: true}))
+     }, [])
+
 
      const handleUpdate = (child: string, id: string | null, todo: Task) => {
          const updatedTodo = {

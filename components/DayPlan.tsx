@@ -71,7 +71,8 @@ const DayPlan = (props: any) => {
                 created_at: new Date().toISOString(),
                 displayTime: dateString(displayTime),
                 date: startDate,
-                completed_at: "Not completed"
+                completed_at: "Not completed",
+                added: false
             }
             dispatch(addTaskToDB(day, taskData))
         }
