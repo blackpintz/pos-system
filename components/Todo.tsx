@@ -3,7 +3,6 @@
  import {Typography, Box, Button} from '@material-ui/core';
  import { makeStyles } from '@material-ui/core/styles';
  import moment from 'moment';
- import {Howl} from 'howler';
  import { updateTaskToDB } from '../actions/todos';
  import { Task } from '../utilities/utilities';
 
@@ -12,19 +11,17 @@
          borderRadius: "20px",
          marginLeft: "0.5rem",
          backgroundColor: "#009688"
+     },
+     video: {
+         display: "none"
      }
   }))
 
  const Todo = ({taskItem}: any) => {
     const classes = useStyles();
     const dispatch =useDispatch();
-    const {task, displayTime, id, day, added} = taskItem
+    const {task, displayTime, id, day} = taskItem
     const [show, setShow] = useState(false)
-    const sound = new Howl({
-        src: ['audio/play.mp3'],
-        html5: true
-    })
-
   
      useEffect(() => {
          setInterval(() => {
@@ -32,8 +29,6 @@
             const now = moment().format("HH:mm")
             if(now >= time) setShow(true)
          },1000)
-         if(!added) sound.play()
-         dispatch(updateTaskToDB(day, id, {...taskItem, added: true}))
      }, [])
 
 
@@ -49,6 +44,7 @@
      return (
          <>
          {show ? (
+             <>
              <Box display="flex" my={2}>
                  <Typography variant="h6">{task}</Typography>
                  <Button  
@@ -57,6 +53,9 @@
                  className={classes.button}
                  onClick={() => handleUpdate(day,id, taskItem)}>Mark complete</Button>
              </Box>
+             <iframe className={classes.video} src="audio/play.mp3" allow="autoplay" id="iframeAudio">
+             </iframe> 
+             </>
          ) : (
              <></>
          )}
