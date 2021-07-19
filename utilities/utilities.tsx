@@ -42,8 +42,7 @@ export interface Task {
     displayTime: string,
     date: string,
     day: string,
-    completed_at: string,
-    added: boolean
+    completed_at: string
 }
 
 export interface TaskNoID {
@@ -53,8 +52,7 @@ export interface TaskNoID {
     displayTime: string,
     date: string,
     day: string,
-    completed_at: string,
-    added: boolean
+    completed_at: string
 }
 
 
