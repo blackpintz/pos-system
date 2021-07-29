@@ -1,55 +1,89 @@
 import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
-import {Grid, Paper, Typography, Card, CardContent, CardActions, IconButton} from '@material-ui/core';
-import AddIcon from '@material-ui/icons/Add';
-import RemoveIcon from '@material-ui/icons/Remove';
+import {Grid, Paper, Typography, Card, CardContent, Button} from '@material-ui/core';
+// import AddIcon from '@material-ui/icons/Add';
+// import RemoveIcon from '@material-ui/icons/Remove';
 import { makeStyles } from '@material-ui/core/styles';
 import {getMenufromDB} from '../actions/menu';
 import Checkout from './Checkout';
 
 const useStyles = makeStyles(theme => ({
     root: {
-      minWidth: 75,
+      position: "relative",
+      padding: 0,
+      backgroundColor: "#c1fba450",
+      left: 0,
+      minWidth: "75px",
+      minHeight: "6rem",
+      height: "100%",
       [theme.breakpoints.down('sm')] : {
           minWidth: 50,
-      }
+      },
     },
 
-    button: {
-        textTransform: "none",
-        color: "#795548",
-        backgroundColor: "#d3d3de",
+    button_down: {
+        color: "#000",
+        position: "absolute",
+        backgroundColor: "#ffd6e0",
+        margin: "0",
+        padding: "0",
+        width: "100%",
+        bottom: "0rem",
+        height: "2rem",
+        left: "0",
+        borderRadius: "0rem"
+    },
+    button_up: {
+        position: "absolute",
+        color: "#000",
+        backgroundColor: "#7bf1a835",
         margin: "0rem",
-        [theme.breakpoints.down('sm')] : {
-            width: "10px",
-            height: "10px"
-        }
+        padding: "0rem",
+        width: "100%",
+        top: "0rem",
+        bottom: "2rem",
+        left: 0,
+        borderRadius: "0rem"
     },
 
     price: {
+        position: "absolute",
         flexGrow: 1,
-        fontSize: "1rem",
+        fontSize: "0.77rem",
         margin: "0rem",
+        padding: "0.1rem",
+        top: 0,
+        right: 0,
         [theme.breakpoints.down('sm')] : {
-            flexGrow: 0,
-            fontSize: "0.5rem",
+            fontSize: "0.5rem"
         }
     },
 
     name: {
-      fontSize: "1rem",
+      position: "absolute",
+      fontSize: "1.2rem",
       margin: "0 0",
+      padding: "0.1rem",
+      left: 0,
+      top: "1.5rem",
         [theme.breakpoints.down('sm')] : {
-            fontSize: "1rem"
-        }},
-    category: {
-      fontSize: ".77rem",
-      margin: "0 0",
-        [theme.breakpoints.down('sm')] : {
-            fontSize: ".55rem"
+            fontSize: "0.8rem",
+            top: "1rem",
         }
-    }
+      },
+    category: {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      padding: "0.1rem",
+
+      fontSize: "0.77rem",
+      margin: "0 0",
+        [theme.breakpoints.down('sm')] : {
+            fontSize: ".5rem"
+        }
+    },
   }));
 
 const Menu = () => {
@@ -81,7 +115,7 @@ const Menu = () => {
 
 
     const handleCart = (price: number, name: string) => {
-        if(data.some((item: {id: string, name: string, price: number, quantity: number})=> item.name === name)) {
+        if(data.some((item: {id: string, name: string, price: number, quantity: number})=> item.name === name && item.quantity > 0)) {
             setData(data => data.map(item => item.name === name ? {...item, quantity: item.quantity + 1} : item))
         } else {
             setData([
@@ -99,18 +133,30 @@ const Menu = () => {
     const handleDelete = (name: string) => {
         setData(data => data.filter(item => item.name !== name))
     }
+    // 
+    // const checkQuantity = (name: string) => {
+    //     const foundItem = data.find(element => element.name === name)
+    //     return foundItem === undefined ? false : foundItem.quantity > 0
+    // }
 
-    const checkQuantity = (name: string) => {
+    const actualQuantity = (name: string) => {
         const foundItem = data.find(element => element.name === name)
-        return foundItem === undefined ? false : foundItem.quantity > 0
+        return foundItem === undefined ? '' : foundItem.quantity
     }
 
     const handleDeleteAll = () => {
         setData([])
     }
 
+    // const handleRemoveFromCart = (name: string) => {
+    //     if(data.some((item: {id: string, name: string, price: number, quantity: number})=> item.quantity < 2)){
+    //     setData(data => data.filter(item => item.name !== name))
+    //   } else {
+    //     setData(data => data.map(item => item.name === name ? {...item, quantity: item.quantity - 1} : item))
+    //   }
+    // }
     const handleRemoveFromCart = (name: string) => {
-        if(data.some((item: {id: string, name: string, price: number, quantity: number})=> item.quantity === 1)){
+      if (actualQuantity(name) < 2){
         setData(data => data.filter(item => item.name !== name))
       } else {
         setData(data => data.map(item => item.name === name ? {...item, quantity: item.quantity - 1} : item))
@@ -126,28 +172,24 @@ const Menu = () => {
                             <Grid key={item.id} item md={3} xs={4}>
                                 <Card className={classes.root} variant="outlined">
                                     <CardContent>
-                                        <Typography className={classes.category} >
-                                            {item.category}
-                                        </Typography>
+                                    <Typography className={classes.category} >
+                                        {item.category}:
+                                    </Typography>
                                         <Typography className={classes.name} >
                                             {item.name}
                                         </Typography>
                                         <Typography className={classes.price} >KES {item.price}</Typography>
+                                        <Button
+                                          onClick = {() => handleCart(item.price, item.name)}
+                                          className={classes.button_up}>
+                                        </Button>
+                                        <Button
+                                          onClick = {() => handleRemoveFromCart(item.name)}
+                                          className={classes.button_down}>
+                                          {actualQuantity(item.name)}
+                                          </Button>
                                     </CardContent>
-                                    <CardActions>
-                                          <IconButton
-                                            onClick = {() => handleCart(item.price, item.name)}
-                                            className={classes.button}>
-                                            <AddIcon fontSize="small" />
-                                          </IconButton>
-                                          {checkQuantity(item.name) ? (
-                                              <IconButton
-                                                onClick = {() => handleRemoveFromCart(item.name)}
-                                                className={classes.button}>
-                                                    <RemoveIcon fontSize="small"/>
-                                                </IconButton>
-                                            ) : (<></>)}
-                                    </CardActions>
+
                                 </Card>
                             </Grid>
                           ))}

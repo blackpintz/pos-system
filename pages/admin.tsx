@@ -15,6 +15,9 @@ const data =[
             {"href":"/","title":"Home"},
             {"href":"/menu","title":"Menu"},
             {"href":"/kitchen","title":"Kitchen"},
+            {"href":"/complete","title":"Complete"},
+            {"href":"/paid","title":"Paid"},
+            {"href":"/orders-deleted","title":"Deleted"},
 
         ];
 
