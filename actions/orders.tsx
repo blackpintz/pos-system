@@ -1,5 +1,6 @@
 import database from '../firebase/firebase';
 import {order, deletedOrder, deletedOrderNoID} from '../utilities/utilities'
+// import moment from 'moment';
 
 interface orderNoID {
     orders: any[],
@@ -15,10 +16,10 @@ interface orderNoID {
 }
 
 const initial = {
-    id: '', 
-    orders: [], 
-    phoneNumber: '', 
-    total: 0, 
+    id: '',
+    orders: [],
+    phoneNumber: '',
+    total: 0,
     created_at: "",
     completed: false,
     completed_time: "",
@@ -78,6 +79,7 @@ export const fetchCompleteOrdersFromDB = () => (
             const Orders: [order] = [initial]
             snapshot.forEach((childSnapshot) => {
                 if(childSnapshot.val().completed) {
+                  console.log()
                     Orders.push({
                         id: childSnapshot.key,
                         ...childSnapshot.val()
@@ -87,6 +89,67 @@ export const fetchCompleteOrdersFromDB = () => (
             })
         })
     }
+)
+
+export const fetchCompleteOrdersFromDBMonth = () => (
+    (dispatch: any) => {
+        return database.ref('VeganOrders').on('value', (snapshot) => {
+            const Orders: [order] = [initial]
+            var d = new Date();
+            d.setDate(1)
+            snapshot.forEach((childSnapshot) => {
+                if(childSnapshot.val().completed && (new Date(childSnapshot.val().created_at) > d)) {
+                  console.log()
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
+                dispatch(fetchCompleteOrderItems(Orders))
+            })
+        })
+    }
+)
+export const fetchCompleteOrdersFromDBDay = () => (
+    (dispatch: any) => {
+        return database.ref('VeganOrders').on('value', (snapshot) => {
+            const Orders: [order] = [initial]
+            var d = new Date();
+            d.setDate(d.getDate() - 1)
+            snapshot.forEach((childSnapshot) => {
+                if(childSnapshot.val().completed && (new Date(childSnapshot.val().created_at) > d)) {
+                  console.log()
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
+                dispatch(fetchCompleteOrderItems(Orders))
+            })
+        })
+    }
+)
+
+const fetchCompleteOrdersByTime = (orderData: [order]) => ({
+    type: "FETCH_COMPLETE_ORDERS_BY_TIME",
+    orderData
+})
+
+export const fetchCompleteOrdersByTimeFromDB = () => (
+    (dispatch: any) => (
+        database.ref('VeganOrders').on('value', (snapshot) => {
+            const Orders: [order] = [initial]
+            snapshot.forEach((childSnapshot) => {
+                if(childSnapshot.val().completed) {
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
+                dispatch(fetchCompleteOrdersByTime(Orders))
+            })
+        })
+    )
 )
 
 const updateOrder = (id: string | null, updates: order) => ({

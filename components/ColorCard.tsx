@@ -5,8 +5,9 @@ TextField, DialogActions} from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { updateDB, addDeletedOrderToDB } from '../actions/orders';
 import { checkQuantity, orderDetails, order } from '../utilities/utilities';
-import {AlertMsg} from '../components/Alert'
-
+import {AlertMsg} from '../components/Alert';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import DoneIcon from '@material-ui/icons/Done';
 
 type Props = {
     color: string
@@ -21,19 +22,23 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
         position: "relative",
         padding: "2vh",
     },
+    video: {
+        display: "none"
+    },
     con:{
-      padding: "3rem",
+      padding: "0.1rem",
     },
     time: {
-      position: "absolute",
-      top: "-1vh",
-      left: "2vw",
+      // position: "absolute",
+      // top: "-1vh",
+      // left: "2vw",
       fontSize: "1.25rem",
         [theme.breakpoints.down('sm')]:{
           fontSize: "1rem",
         }
     },
     phone: {
+      display: "none",
       position: "absolute",
       top: "-1vh",
       right: "2vw",
@@ -55,41 +60,27 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
     cost:{
       position: "absolute",
       bottom: "0vh",
-      left: "2vw",
-      color: "purple",
+      right: "2vw",
+      color: "#412234",
       fontSize: "1.25rem",
         [theme.breakpoints.down('sm')]:{
           fontSize: "1rem",
         }
     },
-    markButton: {
-        backgroundColor: "green",
-        color: "#fff",
-        position: "absolute",
-        borderRadius: "20px",
-        border: 0,
-        // margin: "0 auto",
-        right: "2vw",
-        bottom: "2vh",
-        fontSize: "1.25rem",
-        width: "auto",
-        height: "auto",
-        [theme.breakpoints.down('sm')] : {
-            fontSize: "1rem",
-        }
-    },
     section: {
-        display: "flex",
+        // display: "flex",
         justifyContent: "center",
+        margin: 0,
+        padding: 0,
         '& h4': {
             fontSize: "1rem",
-            margin: "0.3rem 0"
+            // margin: "0.3rem 0"
         },
         '& h4:first-child': {
-            marginRight: "0.3rem"
+            // marginRight: "0.3rem"
         },
         '& h2' : {
-            margin: "0 0.3rem"
+            // margin: "0 0.3rem"
         }
     },
     box:{
@@ -98,21 +89,37 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
         width: "100%",
         margin: "0 auto",
         color: "#000",
-        padding: "0.5rem 0",
+        padding: "0.1rem",
         borderRadius: "10px"
     },
     trashButton : {
-        backgroundColor: "#2F4F4F",
+        backgroundColor: "#EF626C",
         color: "#fff",
-        position: "absolute",
-        right: "15vw",
-        bottom: "2vh",
+        position: "relative",
+        // right: "15vw",
+        // bottom: "2vh",
         borderRadius: "20px",
         [theme.breakpoints.down('sm')] : {
-            right: "2vw",
-            bottom: "10vh",
+            // right: "2vw",
+            // bottom: "10vh",
         }
-    }
+    },
+    markButton: {
+        backgroundColor: "#3581B8",
+        color: "#fff",
+        position: "relative",
+        borderRadius: "20px",
+        border: 0,
+        // margin: "0 auto",
+        // right: "2vw",
+        // bottom: "2vh",
+        fontSize: "1.25rem",
+        width: "auto",
+        height: "auto",
+        [theme.breakpoints.down('sm')] : {
+            fontSize: "1rem",
+        }
+    },
 }))
 
 
@@ -165,6 +172,9 @@ const ColorCard = (props: any) => {
    const re1 = /(0?[1-9]|1[0-2]):[0-5][0-9]./
    const {order, minLapsed, secLapsed} = props
     return (
+      <>
+      <iframe className={classes.video} src="../audio/play.mp3" allow="autoplay" id="iframeAudio">
+      </iframe>
        <Card className={classes.card}>
            <CardContent className={classes.con}>
                <Box className={classes.box}>
@@ -174,11 +184,10 @@ const ColorCard = (props: any) => {
                        <h2> minutes ago.</h2>
                    </section>
                </Box>
-               <h4 className={classes.time}>{(order.created_at).match(re1)}</h4>
-               <h4 className={classes.phone}>{order.phoneNumber}</h4>
-               <h4>Order Created by: {order.name}</h4>
+               <h4>name: {order.name}</h4>
+               <h4>id: {order.id}</h4>
                <ul>
-                   {order.orders.map((item: orderDetails) => (
+                   {(order.orders).map((item: orderDetails) => (
                        <h1 className={classes.items} key={item.id}>{checkQuantity(item.quantity, item.name)}</h1>
                    ))}
                </ul>
@@ -192,14 +201,14 @@ const ColorCard = (props: any) => {
                className={classes.markButton}
                onClick={() => handleUpdate(order.id, order) }
                variant="outlined">
-                   Complete
+                   <DoneIcon />
                </Button>
                <Button
                variant="outlined"
                className={classes.trashButton}
                onClick={handleOpen}
                >
-                   Move To Trash
+                   <DeleteOutlineIcon />
                </Button>
                <Dialog open={open} aria-labelledby="form-dialog-title">
                    <DialogContent>
@@ -220,8 +229,10 @@ const ColorCard = (props: any) => {
                        <Button onClick={() => handleDelete(order.id, order)} variant="outlined"  color="primary">Submit</Button>
                    </DialogActions>
                </Dialog>
+
            </CardActions>
        </Card>
+       </>
     )
 }
 

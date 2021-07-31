@@ -1,9 +1,10 @@
 import React, { useEffect} from 'react';
-import {Card, CardContent, CardActions, Grid, Typography, Button, Chip} from '@material-ui/core';
+import {Card, CardContent, CardActions, Grid, Typography, Chip} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import { fetchCompleteOrdersFromDB, updateDB } from '../actions/orders';
-import {order} from '../utilities/utilities';
+import {updateDB, fetchCompleteOrdersFromDBDay } from '../../actions/orders';
+import {order} from '../../utilities/utilities';
+import BlockIcon from '@material-ui/icons/Block';
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -12,8 +13,8 @@ const useStyles = makeStyles(theme => ({
     },
     items: {
         position: "relative",
-        marginLeft: "0",
-        left: 0,
+        margin: 0,
+        padding: 0,
         textAlign: "left",
         fontSize: "0.75rem",
         [theme.breakpoints.down('sm')]:{
@@ -21,17 +22,17 @@ const useStyles = makeStyles(theme => ({
           }
     },
     phone: {
-        position: "absolute",
-        top: "-1px",
-        right: "2px",
+        // position: "absolute",
+        // top: "-1px",
+        // right: "2px",
         fontSize: "1rem",
         [theme.breakpoints.down('sm')]:{
             fontSize: "1.25rem",
           }
     },
     cost: {
-        position: "absolute",
-        bottom: "0",
+        // position: "absolute",
+        // bottom: "0",
         left: "2px",
         color: "#9c27b0",
         fontSize: "1.25rem",
@@ -49,6 +50,12 @@ const useStyles = makeStyles(theme => ({
         minHeight: "20vh",
         position: "relative"
     },
+    notComplete:{
+      backgroundColor: "#f44336",
+      color: "#fff",
+      padding: 0,
+      margin: "0.1rem",
+    },
     markButton : {
         backgroundColor: "#f44336",
         color: "#fff",
@@ -65,14 +72,22 @@ const useStyles = makeStyles(theme => ({
         }
     },
     paidButton: {
-        backgroundColor: "#8bc34a",
+        backgroundColor: "#32936F",
         color: "#fff",
         borderRadius: "20px"
     },
 
     paidChip: {
-        backgroundColor: "#76ff03",
-        color: "#fff"
+        backgroundColor: "#32936F",
+        color: "#fff",
+        padding: 0,
+        margin: "0.1rem",
+    },
+    unpaidChip: {
+        backgroundColor: "#EF626C",
+        color: "#fff",
+        padding: 0,
+        margin: "0.1rem",
     }
 }))
 
@@ -88,7 +103,7 @@ const Accounting = () => {
            }
            dispatch(updateDB(id, orderToDispatch));
       };
-    
+
     const handlePaidUpdate = (id: string | null, orderToUpdate: order) => {
         const orderToDispatch = {
             ...orderToUpdate,
@@ -104,37 +119,35 @@ const Accounting = () => {
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
 
     useEffect(() => {
-        dispatch(fetchCompleteOrdersFromDB());
+        dispatch(fetchCompleteOrdersFromDBDay());
     }, [])
 
 
     return (
         <>
-        <Typography align="center" variant="h5" gutterBottom>Completed Orders</Typography>
+        <Typography align="center" variant="h5" gutterBottom>24 Hours Orders</Typography>
         <Grid className={classes.grid} spacing={1} container>
             {orders && orders.map(order => (
                 <Grid item xs={12} key={order.id} >
                     <Card className={classes.card}>
                     <CardActions>
-                        <Button
-                        className={classes.markButton}
-                        onClick={() => handleCompleteUpdate(order.id, order) }
-                        variant="contained">not complete</Button>
+                        <Chip className={classes.notComplete}
+                        label="Not Complete"
+                        onClick={() => handleCompleteUpdate(order.id, order)}
+                        icon={<BlockIcon />} />
                         {order.paid ? (
                             <Chip
                             label="Paid"
                             className={classes.paidChip} />
                         ) : (
-                            <Button
-                            className={classes.paidButton}
-                            variant="contained"
-                            onClick={() => handlePaidUpdate(order.id, order) }>
-                                Pay
-                            </Button>
+                          <Chip
+                          label="UnPaid"
+                          className={classes.unpaidChip}
+                          onClick={handlePaidUpdate()} />
                         )}
                     </CardActions>
                         <CardContent className={classes.con}>
-                        <h4 className={classes.phone}>{order.phoneNumber}</h4>
+                        <h4 className={classes.phone}>{order.phoneNumber} {order.created_at}</h4>
                         <ul>
                             {order.orders.map(item => (
                                 <li className={classes.items} key={item.id}>{item.quantity} {item.name}</li>
