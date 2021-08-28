@@ -90,6 +90,11 @@ export const fetchCompleteOrdersFromDB = () => (
         })
     }
 )
+export const fetchOrderByID= (slug: any) => (
+    (dispatch: any) => {
+      
+    }
+)
 export const fetchCompleteOrdersFromDBLastMonth = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {
@@ -130,6 +135,9 @@ export const fetchCompleteOrdersFromDBMonth = () => (
         })
     }
 )
+
+
+
 export const fetchCompleteOrdersFromDBDay = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {

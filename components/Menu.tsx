@@ -213,9 +213,9 @@ const Menu = () => {
                                         {actualQuantity("Delivery")}
                                         </Button>
                                   </CardContent>
-
                               </Card>
                           </Grid>
+
                     </Grid>
                 </Paper>
             </Grid>
@@ -232,3 +232,26 @@ const Menu = () => {
 }
 
 export default Menu
+//
+// <Grid key={'Discount'} item md={3} xs={4}>
+//     <Card className={classes.root} variant="outlined">
+//         <CardContent>
+//         <Typography className={classes.category} >
+//             Discount
+//         </Typography>
+//             <Typography className={classes.name} >
+//                 Discount
+//             </Typography>
+//             <Typography className={classes.price} >KES 25</Typography>
+//             <Button
+//               onClick = {() => handleCart(, "Discount")}
+//               className={classes.button_up}>
+//             </Button>
+//             <Button
+//               onClick = {() => handleRemoveFromCart("Discount")}
+//               className={classes.button_down}>
+//               {actualQuantity("Discount")}
+//               </Button>
+//         </CardContent>
+//     </Card>
+// </Grid>

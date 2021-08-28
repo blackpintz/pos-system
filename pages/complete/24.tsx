@@ -10,6 +10,7 @@ import LocalPhoneIcon from '@material-ui/icons/LocalPhone';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import DoneIcon from '@material-ui/icons/Done';
+import Link from 'next/link'
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -121,6 +122,9 @@ const useStyles = makeStyles(theme => ({
 const Accounting = () => {
     const classes = useStyles();
     const dispatch =useDispatch();
+    const getOrderLink = (id: string) => {
+      return `/o/${id}`
+    }
     const handleCompleteUpdate = (id: string | null, orderToUpdate: order) => {
            const orderToDispatch = {
                ...orderToUpdate,
@@ -213,6 +217,12 @@ const Accounting = () => {
                         label="Not Complete"
                         onClick={() => handleCompleteUpdate(order.id, order)}
                         icon={<BlockIcon />} />
+<Link href={getOrderLink(order.id)}>
+                        <Chip className={classes.auxChip}
+                        label='Open Reciept'
+                                                icon={<ReceiptIcon />} /></Link>
+
+
                         </CardContent>
 
 

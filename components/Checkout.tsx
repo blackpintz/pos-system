@@ -11,10 +11,19 @@ import {AlertMsg} from './Alert';
 
 const useStyles = makeStyles(theme => ({
     button: {
+        margin: "10px",
         marginTop: "2rem",
-        width: "90%",
+        width: "70%",
         borderRadius: "2rem"
     },
+    button_discount: {
+      margin: "10px",
+        marginTop: "2rem",
+        width: "20%",
+        borderRadius: "2rem",
+        backgroundColor: 'indigo'
+    },
+
 
     resetBtn: {
         marginTop: "1.2rem",
@@ -58,6 +67,7 @@ const Checkout = (props: any) => {
     const [instruction, setInstruction] = useState('')
     const [Invalid, setInValid] = useState(false);
     const [notification, setNotification] = useState(false);
+    const [discount, setDiscount] = useState(0)
 
     const dispatch = useDispatch()
 
@@ -68,9 +78,19 @@ const Checkout = (props: any) => {
             let result = item.price * item.quantity
             total += result
         })
-
+        total = total * (1-discount/100)
         return total
     }
+
+    const handleDiscount = () => {
+      if (discount < 50) {setDiscount(discount+5)} else {}
+
+    }
+
+    const removeDiscount = () => {
+      setDiscount(0)
+    }
+
 
     const deleteFromCart = (name: string) => {
         handleDelete(name)
@@ -154,6 +174,19 @@ const Checkout = (props: any) => {
                             </TableCell>
                         </TableRow>
                     ))}
+                    <TableRow component="th" key='discount' scope="row">
+                        <TableCell align="center">Discount</TableCell>
+                        <TableCell align="center">{discount}%</TableCell>
+                        <TableCell align="center"></TableCell>
+                        <TableCell align="center">
+                            <IconButton
+                             onClick = {() => removeDiscount()}
+                            aria-label="delete"
+                            color="secondary">
+                                <DeleteIcon fontSize="small"/>
+                            </IconButton>
+                        </TableCell>
+                    </TableRow>
                     <TableRow>
                         <TableCell rowSpan={3} />
                         <TableCell colSpan={2}>
@@ -173,12 +206,20 @@ const Checkout = (props: any) => {
             color="primary"
             onClick={handleOpen}
             disabled={data.length === 0}>
-            Go to checkout
+            checkout
+            </Button>
+            <Button
+            className={classes.button_discount}
+            variant="contained"
+            color="primary"
+            onClick={handleDiscount}
+            disabled={data.length === 0}>
+            discount
             </Button>
             <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Sign up</DialogTitle>
+                <DialogTitle id="form-dialog-title">Checkout</DialogTitle>
                 <DialogContent  className={classes.dialog}>
-                    <DialogContentText>Please sign up with your phone number.</DialogContentText>
+                    <DialogContentText>customer phone number.</DialogContentText>
                         <TextField
                         id="standard-select-phone-code"
                         select
