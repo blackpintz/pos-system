@@ -122,9 +122,6 @@ const useStyles = makeStyles(theme => ({
 const Accounting = () => {
     const classes = useStyles();
     const dispatch =useDispatch();
-    const getOrderLink = (id: string) => {
-      return `/o/${id}`
-    }
     const handleCompleteUpdate = (id: string | null, orderToUpdate: order) => {
            const orderToDispatch = {
                ...orderToUpdate,
@@ -217,7 +214,7 @@ const Accounting = () => {
                         label="Not Complete"
                         onClick={() => handleCompleteUpdate(order.id, order)}
                         icon={<BlockIcon />} />
-<Link href={getOrderLink(order.id)}>
+<Link href={`/o/${order.id}`}>
                         <Chip className={classes.auxChip}
                         label='Open Reciept'
                                                 icon={<ReceiptIcon />} /></Link>

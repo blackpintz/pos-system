@@ -4,9 +4,9 @@ import styles from '../styles/404.module.css'
 
  const Custom404 = () => {
      return (
-    <Box 
-    width="50%" 
-    mx="auto" 
+    <Box
+    width="50%"
+    mx="auto"
     className = {styles.page}>
     <h1>404 | Page Not Found.</h1>
     <Link href="/">

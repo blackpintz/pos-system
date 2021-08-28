@@ -90,11 +90,24 @@ export const fetchCompleteOrdersFromDB = () => (
         })
     }
 )
-export const fetchOrderByID= (slug: any) => (
+export const fetchOrderByID= (slug: string) => (
     (dispatch: any) => {
-      
+      console.log(slug)
+        return database.ref(`VeganOrders/${slug}`).on('value', (snapshot) => {
+            const Orders: [order] = [initial]
+            var d = new Date();
+            d.setDate(1)
+            snapshot.forEach((childSnapshot) => {
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+
+                dispatch(fetchCompleteOrderItems(Orders))
+            })
+        })
     }
-)
+  )
 export const fetchCompleteOrdersFromDBLastMonth = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {

@@ -1,5 +1,6 @@
 import React, { useEffect} from 'react';
 import {Grid, Typography} from '@material-ui/core';
+
 import { makeStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import {useDispatch, useSelector} from 'react-redux';
@@ -29,7 +30,7 @@ const Kitchen = () => {
 
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
     const tasks = useSelector((state: RootState)=> state.Todos).filter(item => item.id !== '');
-    
+
     useEffect(() => {
         dispatch(fetchIncompleteOrdersFromDB());
         dispatch(fetchTasksFromDB(moment().format('dddd')))

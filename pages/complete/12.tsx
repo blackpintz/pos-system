@@ -10,6 +10,7 @@ import LocalPhoneIcon from '@material-ui/icons/LocalPhone';
 import ReceiptIcon from '@material-ui/icons/Receipt';
 import PersonOutlineIcon from '@material-ui/icons/PersonOutline';
 import DoneIcon from '@material-ui/icons/Done';
+import Link from 'next/link'
 
 const useStyles = makeStyles(theme => ({
     grid: {
@@ -149,7 +150,7 @@ const Accounting = () => {
     useEffect(() => {
         dispatch(fetchCompleteOrdersFromDB12());
     }, [])
-    const total = ordersx.reduce((a,v) =>  a = a + v.total , 0 )
+    const total = ordersx.reduce((a,v) =>  a = a + v.total , 0 );
 
     return (
         <>
@@ -215,8 +216,11 @@ const Accounting = () => {
                         onClick={() => handleCompleteUpdate(order.id, order)}
                         icon={<BlockIcon />} />
                         </CardContent>
-
-
+                        <Link href={`/o/${order.id}`}>
+                          <Chip className={classes.auxChip}
+                          label='Open Reciept'
+                          icon={<ReceiptIcon />} />
+                          </Link>
                     </Card>
                 </Grid>
             ))}

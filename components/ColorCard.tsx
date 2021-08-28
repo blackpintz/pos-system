@@ -1,13 +1,16 @@
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import { Card, CardActions, CardContent, Button, Box, Typography, Dialog, DialogContent,  DialogContentText,
-TextField, DialogActions} from '@material-ui/core';
+TextField, Chip, DialogActions} from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { updateDB, addDeletedOrderToDB } from '../actions/orders';
 import { checkQuantity, orderDetails, order } from '../utilities/utilities';
 import {AlertMsg} from '../components/Alert'
 import DoneIcon from '@material-ui/icons/Done';
 import DeleteIcon from '@material-ui/icons/Delete';
+
+import ReceiptIcon from '@material-ui/icons/Receipt';
+
 
 type Props = {
     color: string
@@ -101,6 +104,15 @@ const useStyles = makeStyles<Theme, Props>(theme => ({
         color: "#000",
         padding: "0.5rem 0",
         borderRadius: "10px"
+    },
+    auxChip:{
+      position: "relative",
+      margin: "2px"
+    },
+    box2: {
+      position: "absolute",
+      top: "0.5rem",
+      right: "0.5rem"
     },
     trashButton : {
         display: "none",
@@ -222,6 +234,26 @@ const ColorCard = (props: any) => {
                    </DialogActions>
                </Dialog>
            </CardActions>
+<Box className={classes.box2}>
+             <Chip className={classes.auxChip}
+             onClick={() => {
+               window.prompt('Copy and send this to the client!',`Thanks for eating at Vegan Basket! Here's your receipt: https://pos.vegan.garden/o/${order.id}`)
+             }}
+             label='Get Reciept'
+             icon={<ReceiptIcon />} />
+             <Chip className={classes.auxChip}
+             label='whatsapp'
+             onClick={()=>{
+               window.open(`https://wa.me/${order.phoneNumber}`)
+             }}/>
+             <Chip className={classes.auxChip}
+             label='text'
+             onClick={()=>{
+
+               window.open(`sms://+${order.phoneNumber}?body=Thanks for eating at Vegan Basket! Here is your receipt: https://pos.vegan.garden/o/${order.id}`)
+             }}/>
+             </Box>
+
        </Card>
     )
 }
