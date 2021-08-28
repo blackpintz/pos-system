@@ -52,6 +52,7 @@ const Checkout = (props: any) => {
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
     const [code, setCode] = useState('+254');
     const [name, setName] = useState('');
     const [instruction, setInstruction] = useState('')
@@ -92,6 +93,7 @@ const Checkout = (props: any) => {
         completed_time: "pending",
         paid: false,
         name: name !== '' ? name : "Anonymous",
+        address: address !== '' ? address : "None",
         instruction: instruction !== '' ? instruction : "None",
         deleted: false
 
@@ -121,10 +123,10 @@ const Checkout = (props: any) => {
     return (
         <>
         <Typography variant="h6" align="center">Orders</Typography>
-        <AlertMsg 
-        msg="Thank you for your order" 
-        valid={notification} 
-        handleValid={() => setNotification(false)} 
+        <AlertMsg
+        msg="Thank you for your order"
+        valid={notification}
+        handleValid={() => setNotification(false)}
         type="pass" />
         <TableContainer component={Paper} elevation={0}>
             <Table aria-label="simple table">
@@ -192,7 +194,7 @@ const Checkout = (props: any) => {
                         ))}
                         </TextField>
                         <TextField
-                        placeholder="Enter your phone number"
+                        placeholder="phone number"
                         required
                         value={phone}
                         type="number"
@@ -202,12 +204,19 @@ const Checkout = (props: any) => {
                         />
                         <AlertMsg msg="Your phone is invalid" valid={Invalid} handleValid={()=>setInValid(false)} type="fail" />
                         <TextField
-                        placeholder="Enter your name"
+                        placeholder="Name"
                         type="string"
                         value={name}
                         variant="outlined"
                         fullWidth
                         onChange={(e) =>{setName(e.target.value)}} />
+                        <TextField
+                        placeholder="Address"
+                        type="string"
+                        value={address}
+                        variant="outlined"
+                        fullWidth
+                        onChange={(e) =>{setAddress(e.target.value)}} />
                         <Typography variant="body1" className={classes.instructionsTitle}>Special Instructions</Typography>
                         <TextField
                         placeholder="Add preferences (extra sauce, No pepper, etc)"

@@ -90,7 +90,27 @@ export const fetchCompleteOrdersFromDB = () => (
         })
     }
 )
-
+export const fetchCompleteOrdersFromDBLastMonth = () => (
+    (dispatch: any) => {
+        return database.ref('VeganOrders').on('value', (snapshot) => {
+            const Orders: [order] = [initial]
+            var d = new Date();
+            // d.setDate(1)
+            d.setDate(1);
+            d.setMonth(d.getMonth()-1)
+            snapshot.forEach((childSnapshot) => {
+                if(childSnapshot.val().completed && (new Date(childSnapshot.val().created_at) > d)) {
+                  console.log()
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
+                dispatch(fetchCompleteOrderItems(Orders))
+            })
+        })
+    }
+)
 export const fetchCompleteOrdersFromDBMonth = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {
@@ -116,6 +136,45 @@ export const fetchCompleteOrdersFromDBDay = () => (
             const Orders: [order] = [initial]
             var d = new Date();
             d.setDate(d.getDate() - 1)
+            snapshot.forEach((childSnapshot) => {
+                if(childSnapshot.val().completed && (new Date(childSnapshot.val().created_at) > d)) {
+                  console.log()
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
+                dispatch(fetchCompleteOrderItems(Orders))
+            })
+        })
+    }
+)
+export const fetchCompleteOrdersFromDB12 = () => (
+    (dispatch: any) => {
+        return database.ref('VeganOrders').on('value', (snapshot) => {
+            const Orders: [order] = [initial]
+            var d = new Date();
+            // d.setDate(d.getHour() - 12)
+            d.setHours(0,0,0,0);
+            snapshot.forEach((childSnapshot) => {
+                if(childSnapshot.val().completed && (new Date(childSnapshot.val().created_at) > d)) {
+                  console.log()
+                    Orders.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    })
+                }
+                dispatch(fetchCompleteOrderItems(Orders))
+            })
+        })
+    }
+)
+export const fetchCompleteOrdersFromDBWeek = () => (
+    (dispatch: any) => {
+        return database.ref('VeganOrders').on('value', (snapshot) => {
+            const Orders: [order] = [initial]
+            var d = new Date();
+            d.setDate(d.getDate() - 7)
             snapshot.forEach((childSnapshot) => {
                 if(childSnapshot.val().completed && (new Date(childSnapshot.val().created_at) > d)) {
                   console.log()

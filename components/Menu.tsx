@@ -115,7 +115,7 @@ const Menu = () => {
 
 
     const handleCart = (price: number, name: string) => {
-        if(data.some((item: {id: string, name: string, price: number, quantity: number})=> item.name === name && item.quantity > 0)) {
+      if(data.some((item: {id: string, name: string, price: number, quantity: number})=> item.name === name && item.quantity > 0)) {
             setData(data => data.map(item => item.name === name ? {...item, quantity: item.quantity + 1} : item))
         } else {
             setData([
@@ -133,7 +133,7 @@ const Menu = () => {
     const handleDelete = (name: string) => {
         setData(data => data.filter(item => item.name !== name))
     }
-    // 
+    //
     // const checkQuantity = (name: string) => {
     //     const foundItem = data.find(element => element.name === name)
     //     return foundItem === undefined ? false : foundItem.quantity > 0
@@ -193,6 +193,29 @@ const Menu = () => {
                                 </Card>
                             </Grid>
                           ))}
+                          <Grid key={'delivery'} item md={3} xs={4}>
+                              <Card className={classes.root} variant="outlined">
+                                  <CardContent>
+                                  <Typography className={classes.category} >
+                                      Delivery
+                                  </Typography>
+                                      <Typography className={classes.name} >
+                                          Delivery
+                                      </Typography>
+                                      <Typography className={classes.price} >KES 25</Typography>
+                                      <Button
+                                        onClick = {() => handleCart(25, "Delivery")}
+                                        className={classes.button_up}>
+                                      </Button>
+                                      <Button
+                                        onClick = {() => handleRemoveFromCart("Delivery")}
+                                        className={classes.button_down}>
+                                        {actualQuantity("Delivery")}
+                                        </Button>
+                                  </CardContent>
+
+                              </Card>
+                          </Grid>
                     </Grid>
                 </Paper>
             </Grid>

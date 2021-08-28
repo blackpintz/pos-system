@@ -2,7 +2,7 @@ import React, { useEffect} from 'react';
 import {Card, CardContent, Grid, Typography} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchCompleteOrdersFromDBMonth } from '../../actions/orders';
+import {fetchCompleteOrdersFromDBLastMonth } from '../../actions/orders';
 import {order} from '../../utilities/utilities';
 
 const useStyles = makeStyles(theme => ({
@@ -109,7 +109,7 @@ const Accounting = () => {
     const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id !== '');
 
     useEffect(() => {
-        dispatch(fetchCompleteOrdersFromDBMonth());
+        dispatch(fetchCompleteOrdersFromDBLastMonth());
     }, [])
 
     const total = orders.reduce((a,v) =>  a = a + v.total , 0 )
@@ -121,7 +121,7 @@ const Accounting = () => {
 
     return (
         <>
-        <Typography align="center" variant="h5" gutterBottom>Current Month Accounting</Typography>
+        <Typography align="center" variant="h5" gutterBottom>Last Month Accounting</Typography>
         <Grid className={classes.grid} spacing={1} container>
           <Grid item xs={12} key="total" >
               <Card className={classes.card}>
