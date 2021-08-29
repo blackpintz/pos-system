@@ -4,6 +4,7 @@ import {fetchCompleteOrdersFromDB } from '../../actions/orders';
 import {useDispatch, useSelector} from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {order} from '../../utilities/utilities';
+import Image from 'next/image'
 
 import {Card, CardContent, Grid, Table, TableHead, TableRow, TableCell} from '@material-ui/core';
 const useStyles = makeStyles(theme => ({
@@ -82,27 +83,35 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 const Post = () => {
-  const router = useRouter()
-  const { slug } = router.query
+  const router = useRouter();
+  const { slug } = router.query;
   const classes = useStyles();
-  const dispatch =useDispatch();
+  const getOrder = () => {
+      const dispatch =useDispatch();
 
-  const orders = useSelector((state: RootState)=> state.Orders).filter(item => item.id == slug);
-  interface RootState {
-      Orders: [order]
+      useEffect(() => {
+          dispatch(fetchCompleteOrdersFromDB());
+      }, [])
+
+      interface RootState {
+          Orders: [order]
+      }
+      let orders_all =  useSelector((state: RootState)=> state.Orders)
+      console.log('there')
+    return orders_all.filter(item => (item.id===slug));
+
   }
-  console.log(orders)
-  // console.log(item.id)
-  console.log(slug)
-  useEffect(() => {
-      dispatch(fetchCompleteOrdersFromDB());
-  }, [])
+  // console.log('orders')
+  // console.log(ordersx)
+ console.log('here')
+ let orderX = getOrder()
 
 
   return (
       <>
+      <h1>{slug}</h1>
       <Grid className={classes.grid} spacing={1} container>
-          {orders && orders.map(order => (
+          {orderX.map(order => (
                   <Grid item xs={12} key={order.id} >
                   <Card className={classes.card}>
                       <CardContent className={classes.con}>
@@ -131,6 +140,7 @@ const Post = () => {
                   </Card>
                   </Grid>
           ))}
+          <Image src='/vegan-basket-logo.svg' alt='' layout="fill" />
 
       </Grid>
       </>)

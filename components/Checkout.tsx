@@ -138,6 +138,42 @@ const Checkout = (props: any) => {
               }, 5000);
         }
     }
+    const getOrderDetails = () => {
+      let dst = ' '
+      let total= 0
+      data.map((element: orderDetails) => {
+        let subtotal = element.quantity*element.price
+        if (dst === ' ') {dst = ('You ordered: '+element.quantity + ' ' +element.name)} else
+        { dst = dst.concat(', ',(element.quantity + ' ' +element.name))}
+
+        total += subtotal
+        console.log(element.name)
+      })
+      dst = dst.concat('. ','Thanks for ordering from Vegan Basket!')
+      console.log(dst)
+      return `Your total was ${total} KES.`.concat(' ',dst)
+    }
+    const handleOrdersSMS = () => {
+        let str = phone.toString()
+        if((str.charAt(0) !== "0" && str.length !== 9) || (str.charAt(0) === "0" && str.length !== 10)) {
+            setInValid(true);
+        } else {
+            dispatch(addOrderItemToDB(orderData))
+            alert(`SMS: ${getOrderDetails()}`)
+            window.open(`sms://${orderData.phoneNumber}?body=${getOrderDetails()}`)
+            handleDeleteAll()
+            setOpen(false);
+            setPhone('');
+            setName('');
+            setInstruction('');
+            setCode('+254')
+            setInValid(false)
+            setNotification(true)
+            setInterval(() => {
+                setNotification(false)
+              }, 5000);
+        }
+    }
 
 
     return (
@@ -272,6 +308,8 @@ const Checkout = (props: any) => {
                 <DialogActions>
                     <Button onClick={handleClose} variant="outlined" color="primary">Cancel</Button>
                     <Button onClick={handleOrders} variant="outlined"  color="primary">Submit</Button>
+                    <Button onClick={handleOrdersSMS} variant="outlined"  color="primary">SMS Receipt</Button>
+
                 </DialogActions>
             </Dialog>
         </Box>
