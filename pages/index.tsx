@@ -31,7 +31,7 @@ export default function Home() {
     <>
     <Box className={classes.grid}>
     <br/>
-
+    <h1>Hello there!</h1>
     <Typography variant="h3" gutterBottom>Site Under Construction</Typography>
     <Typography variant="h5" gutterBottom>The Vegan Garden Point of Sale system is currently under construction. We'll notify you if anything exciting happens 😉😁</Typography>
     <br/>
