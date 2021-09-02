@@ -97,13 +97,10 @@ const Post = () => {
           Orders: [order]
       }
       let orders_all =  useSelector((state: RootState)=> state.Orders)
-      console.log('there')
     return orders_all.filter(item => (item.id===slug));
 
   }
-  // console.log('orders')
-  // console.log(ordersx)
- console.log('here')
+
  let orderX = getOrder()
 
 
@@ -127,7 +124,7 @@ const Post = () => {
                                 </TableHead>
 
                               {order.orders.map(item => (
-                                <TableRow>
+                                <TableRow key={item.id}>
                                     <TableCell align="center">{item.name}</TableCell>
                                     <TableCell align="center">{item.price}</TableCell>
                                     <TableCell align="center"> {item.quantity}</TableCell>
