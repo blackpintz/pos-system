@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import React, { useEffect} from 'react';
-import {fetchCompleteOrdersFromDB } from '../../actions/orders';
+import {fetchAllOrdersFromDB } from '../../actions/orders';
 import {useDispatch, useSelector} from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import {order} from '../../utilities/utilities';
@@ -86,29 +86,24 @@ const Post = () => {
   const router = useRouter();
   const { slug } = router.query;
   const classes = useStyles();
-  const getOrder = () => {
-      const dispatch =useDispatch();
-
-      useEffect(() => {
-          dispatch(fetchCompleteOrdersFromDB());
-      }, [])
-
-      interface RootState {
-          Orders: [order]
-      }
-      let orders_all =  useSelector((state: RootState)=> state.Orders)
-    return orders_all.filter(item => (item.id===slug));
-
+  const dispatch =useDispatch();
+  interface RootState {
+    Orders: [order]
   }
 
- let orderX = getOrder()
+   const allOrders = useSelector((state: RootState)=> state.Orders)
+   const orderX =  allOrders.filter(item => item.id === slug)
+
+  useEffect(() => {
+    dispatch(fetchAllOrdersFromDB());
+  }, [])
 
 
   return (
       <>
       <h1>{slug}</h1>
       <Grid className={classes.grid} spacing={1} container>
-          {orderX.map(order => (
+          {orderX.map((order: order) => (
                   <Grid item xs={12} key={order.id} >
                   <Card className={classes.card}>
                       <CardContent className={classes.con}>

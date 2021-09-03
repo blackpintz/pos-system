@@ -1,12 +1,13 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react';
+import { useRouter } from 'next/router';
 import {TableContainer, Typography, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton,
 Box, Button, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import { makeStyles } from '@material-ui/core/styles';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {addOrderItemToDB} from '../actions/orders'
 import countryCodes from '../store/countryCodes';
-import { orderDetails } from '../utilities/utilities';
+import { orderDetails, order } from '../utilities/utilities';
 import {AlertMsg} from './Alert';
 
 const useStyles = makeStyles(theme => ({
@@ -57,7 +58,7 @@ const useStyles = makeStyles(theme => ({
 
 const Checkout = (props: any) => {
     const {data, handleDelete, handleDeleteAll} = props
-
+    const router = useRouter()
     const classes = useStyles();
     const [open, setOpen] = useState(false);
     const [phone, setPhone] = useState('');
@@ -67,11 +68,25 @@ const Checkout = (props: any) => {
     const [instruction, setInstruction] = useState('')
     const [Invalid, setInValid] = useState(false);
     const [notification, setNotification] = useState(false);
-    const [discount, setDiscount] = useState(0)
+    const [discount, setDiscount] = useState(0);
+    const [newOrder, setNewOrder] = useState<order | null>(null)
 
     const dispatch = useDispatch()
 
+    interface RootState {
+        Order: order
+    }
 
+    const createdOrder = useSelector((state: RootState)=> state.Order)
+
+    useEffect(() => {
+       setNewOrder(createdOrder);
+       console.log(newOrder);
+       console.log(createdOrder);
+       if(newOrder !== null) {
+           router.push(`/o/${createdOrder.id}`)
+       }
+    }, [createdOrder])
     const handleTotal = () => {
         let total = 0
         data.forEach((item: orderDetails) => {
@@ -158,7 +173,7 @@ const Checkout = (props: any) => {
         if((str.charAt(0) !== "0" && str.length !== 9) || (str.charAt(0) === "0" && str.length !== 10)) {
             setInValid(true);
         } else {
-            dispatch(addOrderItemToDB(orderData))
+            dispatch(addOrderItemToDB(orderData));
             alert(`SMS: ${getOrderDetails()}`)
             window.open(`sms://${orderData.phoneNumber}?body=${getOrderDetails()}`)
             handleDeleteAll()
@@ -172,6 +187,7 @@ const Checkout = (props: any) => {
             setInterval(() => {
                 setNotification(false)
               }, 5000);
+           
         }
     }
 

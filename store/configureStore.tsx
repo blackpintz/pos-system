@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {persistReducer} from 'redux-persist';
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import menuReducers from '../reducers/menu';
-import orderReducers from '../reducers/orders';
+import {orderReducers, singleOrderReducer} from '../reducers/orders';
 import todoReducers from '../reducers/todo';
 
 let store: any;
@@ -13,13 +13,15 @@ let store: any;
 const initialState = {
     Menu: [],
     Orders: [],
-    Todos: []
+    Todos: [],
+    Order: {}
 }
 
 const rootReducers =  combineReducers({
     Menu: menuReducers,
     Orders: orderReducers,
-    Todos: todoReducers
+    Todos: todoReducers,
+    Order: singleOrderReducer
 })
 
 const createNoopStorage = () => {
@@ -42,7 +44,7 @@ const createNoopStorage = () => {
 const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['Orders']
+    whitelist: ['Order', 'Orders']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducers)

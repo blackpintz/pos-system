@@ -46,6 +46,26 @@ export const addOrderItemToDB = (itemData: orderNoID) => (
     )
 )
 
+const fetchAllOrders = (orderData: [order]) => ({
+    type: "FETCH_ALL_ORDERS",
+    orderData
+})
+
+export const fetchAllOrdersFromDB = () => (
+    (dispatch: any) => (
+        database.ref('VeganOrders').on('value', (snapshot) => {
+            const Orders: [order] = [initial]
+            snapshot.forEach((childSnapshot) => {
+                Orders.push({
+                    id:childSnapshot.key,
+                    ...childSnapshot.val()
+                })
+                dispatch(fetchAllOrders(Orders))
+            })
+        })
+    )
+)
+
 const fetchIncompleteOrderItems = (orderData: [order]) => ({
     type: "FETCH_INCOMPLETE_ORDERS",
     orderData
@@ -79,7 +99,6 @@ export const fetchCompleteOrdersFromDB = () => (
             const Orders: [order] = [initial]
             snapshot.forEach((childSnapshot) => {
                 if(childSnapshot.val().completed) {
-                  console.log()
                     Orders.push({
                         id: childSnapshot.key,
                         ...childSnapshot.val()
@@ -90,24 +109,22 @@ export const fetchCompleteOrdersFromDB = () => (
         })
     }
 )
-export const fetchOrderByID= (slug: string) => (
-    (dispatch: any) => {
-      console.log(slug)
-        return database.ref(`VeganOrders/${slug}`).on('value', (snapshot) => {
-            const Orders: [order] = [initial]
-            var d = new Date();
-            d.setDate(1)
-            snapshot.forEach((childSnapshot) => {
-                    Orders.push({
-                        id: childSnapshot.key,
-                        ...childSnapshot.val()
-                    })
 
-                dispatch(fetchCompleteOrderItems(Orders))
-            })
+const fetchOrderByID = (id: string | string[], item: order) => ({
+    type: 'FETCH_ORDER_BY_ID',
+    id,
+    item
+})
+
+export const fetchOrderByIDFromDB= (slug: string | string[]) => (
+    (dispatch: any)=>(
+        database.ref(`VeganOrders/${slug}`).on('value', (snapshot) => {
+           dispatch(fetchOrderByID(slug, snapshot.val())) 
         })
-    }
-  )
+    )
+)
+
+
 export const fetchCompleteOrdersFromDBLastMonth = () => (
     (dispatch: any) => {
         return database.ref('VeganOrders').on('value', (snapshot) => {
@@ -293,6 +310,7 @@ export const deleteTrashOrderFromDB = (id: string | null) => (
         })
     )
 )
+
 
 const addDeletedOrderToTrash = (item: deletedOrder) => ({
     type: "ADD_ORDER_TO_TRASH",

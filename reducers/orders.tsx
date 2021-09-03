@@ -10,8 +10,10 @@ interface order {
     completed_time: string
 }
 
-const orderReducers = (state = [], action: AnyAction) => {
+export const orderReducers = (state = [], action: AnyAction) => {
     switch(action.type) {
+        case 'FETCH_ALL_ORDERS':
+            return [...action.orderData]
         case 'FETCH_INCOMPLETE_ORDERS':
             return [...action.orderData]
         case 'FETCH_COMPLETE_ORDERS':
@@ -34,9 +36,18 @@ const orderReducers = (state = [], action: AnyAction) => {
             return state.filter((x: order) => x.id !== action.id )
         case 'REMOVE_TRASH_ORDER':
             return state.filter((x: order) => x.id !== action.id )
+        case 'FETCH_ORDER_BY_ID':
+            return {...state, ...action.item}
         default:
             return state
     }
 }
 
-export default orderReducers
+export const singleOrderReducer = (state={}, action: AnyAction) => {
+    switch(action.type) {
+        case 'ADD_ORDER':
+            return {...state, ...action.item}
+        default:
+            return state
+    }
+}
