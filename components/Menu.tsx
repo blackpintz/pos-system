@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import {Grid, Paper, Typography, Card, CardContent, Button} from '@material-ui/core';
-// import AddIcon from '@material-ui/icons/Add';
-// import RemoveIcon from '@material-ui/icons/Remove';
 import { makeStyles } from '@material-ui/core/styles';
 import {getMenufromDB} from '../actions/menu';
 import Checkout from './Checkout';
@@ -133,11 +131,6 @@ const Menu = () => {
     const handleDelete = (name: string) => {
         setData(data => data.filter(item => item.name !== name))
     }
-    //
-    // const checkQuantity = (name: string) => {
-    //     const foundItem = data.find(element => element.name === name)
-    //     return foundItem === undefined ? false : foundItem.quantity > 0
-    // }
 
     const actualQuantity = (name: string) => {
         const foundItem = data.find(element => element.name === name)
@@ -148,13 +141,6 @@ const Menu = () => {
         setData([])
     }
 
-    // const handleRemoveFromCart = (name: string) => {
-    //     if(data.some((item: {id: string, name: string, price: number, quantity: number})=> item.quantity < 2)){
-    //     setData(data => data.filter(item => item.name !== name))
-    //   } else {
-    //     setData(data => data.map(item => item.name === name ? {...item, quantity: item.quantity - 1} : item))
-    //   }
-    // }
     const handleRemoveFromCart = (name: string) => {
       if (actualQuantity(name) < 2){
         setData(data => data.filter(item => item.name !== name))
@@ -232,26 +218,3 @@ const Menu = () => {
 }
 
 export default Menu
-//
-// <Grid key={'Discount'} item md={3} xs={4}>
-//     <Card className={classes.root} variant="outlined">
-//         <CardContent>
-//         <Typography className={classes.category} >
-//             Discount
-//         </Typography>
-//             <Typography className={classes.name} >
-//                 Discount
-//             </Typography>
-//             <Typography className={classes.price} >KES 25</Typography>
-//             <Button
-//               onClick = {() => handleCart(, "Discount")}
-//               className={classes.button_up}>
-//             </Button>
-//             <Button
-//               onClick = {() => handleRemoveFromCart("Discount")}
-//               className={classes.button_down}>
-//               {actualQuantity("Discount")}
-//               </Button>
-//         </CardContent>
-//     </Card>
-// </Grid>

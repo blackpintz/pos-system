@@ -1,5 +1,7 @@
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import React, { useEffect} from 'react';
+import {Button, Box} from '@material-ui/core';
 import {fetchAllOrdersFromDB } from '../../actions/orders';
 import {useDispatch, useSelector} from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
@@ -101,7 +103,6 @@ const Post = () => {
 
   return (
       <>
-      <h1>{slug}</h1>
       <Grid className={classes.grid} spacing={1} container>
           {orderX.map((order: order) => (
                   <Grid item xs={12} key={order.id} >
@@ -133,7 +134,16 @@ const Post = () => {
                   </Grid>
           ))}
           <Image src='/vegan-basket-logo.svg' alt='' layout="fill" />
-
+          <Box>
+            <Link href="/kitchen">
+              <Button variant="outlined" color="primary">View orders</Button>
+            </Link>
+          </Box>
+          <Box>
+          <Link href="/menu">
+            <Button variant="outlined" color="primary">Create another order</Button>
+          </Link>
+          </Box>
       </Grid>
       </>)
 }
