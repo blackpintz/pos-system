@@ -38,3 +38,4 @@ handler.js
 .serverless_nextjs/
 todo.js
 next-env.d.ts
+.env
